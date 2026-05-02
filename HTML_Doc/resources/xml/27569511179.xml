@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Custom notification classes-->
+<BAObjectImporterDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.sibt.com/Industry/BuildingTechnologies/SystemOne/01.00/domain/baimp/" xsi:schemaLocation="http://www.sibt.com/Industry/BuildingTechnologies/SystemOne/01.00/domain/baimp/ BAObjectImporter.xsd">
+    <DocHeader HeaderVersion="01.00">
+        <DocDesc DocContentType="CustomNC" DocName="CustomNotificationClasses" DocDescription="Custom notification classes"/>
+        <Modified SourceID="ABT" Timestamp="2024-03-04T13:59:59Z"/>
+    </DocHeader>
+    <BAObjectImporterContent ContentVersion="01.00">
+        <BAObjects>
+            <BAObject Type="NotifClass" InstanceNumber="1">
+                <Properties>
+                    <Property ID="PartNam">
+                        <StringValue Value="NotifCl1Extd"/>
+                    </Property>
+                    <Property ID="Des">
+                        <StringValue Value=" Highest priority notif.(acked., reset)"/>
+                    </Property>
+                    <Property ID="NotifCl">
+                        <IntegerValue Value="1"/>
+                    </Property>
+                    <Property ID="Prio">
+                        <ArrayValue>
+                            <ArrayElement Index="0">
+                                <IntegerValue Value="1"/>
+                            </ArrayElement>
+                            <ArrayElement Index="1">
+                                <IntegerValue Value="1"/>
+                            </ArrayElement>
+                            <ArrayElement Index="2">
+                                <IntegerValue Value="5"/>
+                            </ArrayElement>
+                        </ArrayValue>
+                    </Property>
+                    <Property ID="AckReq">
+                        <BitStringValue>
+                            <Bit Number="0" Value="true"/>
+                            <Bit Number="1" Value="true"/>
+                            <Bit Number="2" Value="false"/>
+                        </BitStringValue>
+                    </Property>
+                    <Property ID="FiltrLvl">
+                        <EnumValue Value="2"/>
+                    </Property>
+                    <Property ID="RecpList">
+                        <ListValue Name="BACnetDestinationListType">
+                            <Element>
+                                <SequenceValue Name="BACnetDestination">
+                                    <Field Name="ValidDays">
+                                        <BitStringValue>
+                                            <Bit Number="0" Value="true"/>
+                                            <Bit Number="1" Value="true"/>
+                                            <Bit Number="2" Value="true"/>
+                                            <Bit Number="3" Value="true"/>
+                                            <Bit Number="4" Value="true"/>
+                                            <Bit Number="5" Value="true"/>
+                                            <Bit Number="6" Value="true"/>
+                                        </BitStringValue> 
+                                    </Field>
+                                    <Field Name="FromTi">
+                                        <TimeValue Hour="00" Minute="00" Second="00" Millisecond="000"/>
+                                    </Field>
+                                    <Field Name="ToTi">
+                                        <TimeValue Hour="23" Minute="59" Second="00" Millisecond="000"/>
+                                    </Field>
+                                    <Field Name="Recipient">
+                                        <ChoiceValue Name="BACnetRecipientType">
+                                            <SelectedEntry Name="Device">
+                                                <IntegerValue Value="9998"/>
+                                            </SelectedEntry> 
+                                        </ChoiceValue>
+                                    </Field>
+                                    <Field Name="PrcID">
+                                        <IntegerValue Value="600"/>
+                                    </Field>
+                                    <Field Name="CnfNotif">
+                                        <BooleanValue Value="true"/>
+                                    </Field>
+                                    <Field Name="Transitions">
+                                        <BitStringValue>
+                                            <Bit Number="0" Value="false"/>
+                                            <Bit Number="1" Value="true"/>
+                                            <Bit Number="2" Value="true"/>
+                                        </BitStringValue>
+                                    </Field>
+                                </SequenceValue>
+                            </Element>
+							<Element>
+                                <SequenceValue Name="BACnetDestination">
+                                    <Field Name="ValidDays">
+                                        <BitStringValue>
+                                            <Bit Number="0" Value="true"/>
+                                            <Bit Number="1" Value="true"/>
+                                            <Bit Number="2" Value="true"/>
+                                            <Bit Number="3" Value="false"/>
+                                            <Bit Number="4" Value="true"/>
+                                            <Bit Number="5" Value="true"/>
+                                            <Bit Number="6" Value="true"/>
+                                        </BitStringValue> 
+                                    </Field>
+                                    <Field Name="FromTi">
+                                        <TimeValue Hour="11" Minute="11" Second="11" Millisecond="000"/>
+                                    </Field>
+                                    <Field Name="ToTi">
+                                        <TimeValue Hour="23" Minute="59" Second="00" Millisecond="000"/>
+                                    </Field>
+                                    <Field Name="Recipient">
+										<ChoiceValue Name="BACnetRecipientType">
+											<SelectedEntry Name="Address">
+												<SequenceValue Name="BACnetAddress">
+													<Field Name="NwkNr">
+														<IntegerValue Value="1234"/>
+													</Field>
+													<Field Name="MACAddr">
+														<OctectStringValue Value="1A2B3C4D5E66"/>
+													</Field>
+												</SequenceValue>
+											</SelectedEntry> 
+										</ChoiceValue>                                
+									</Field>
+                                    <Field Name="PrcID">
+                                        <IntegerValue Value="600"/>
+                                    </Field>
+                                    <Field Name="CnfNotif">
+                                        <BooleanValue Value="true"/>
+                                    </Field>
+                                    <Field Name="Transitions">
+                                        <BitStringValue>
+                                            <Bit Number="0" Value="true"/>
+                                            <Bit Number="1" Value="true"/>
+                                            <Bit Number="2" Value="false"/>
+                                        </BitStringValue>
+                                    </Field>
+                                </SequenceValue>
+                            </Element>
+                        </ListValue>
+                    </Property>
+                </Properties>
+            </BAObject>
+        </BAObjects>
+    </BAObjectImporterContent>
+</BAObjectImporterDocument>

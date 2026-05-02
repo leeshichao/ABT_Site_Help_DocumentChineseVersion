@@ -1,0 +1,38 @@
+﻿.typeahead__list,
+.typeahead__field input {
+	border-radius: 0px;
+}
+
+.typeahead__list {
+	border-top: none;
+}
+
+.typeahead__cancel-button {
+    line-height: 0.75;
+	font-size: 20px;
+}
+
+#search-collapse .typeahead__cancel-button {
+    top: 12px;
+	right: 12px;
+}
+
+ul.typeahead__list,
+.typeahead__field input {
+	font-size: 14px;
+}
+
+.schema-navbar-search input {
+    background-image: url(../../img/search.svg) !important;
+    background-position: 2px 7px !important;
+    background-repeat: no-repeat !important;
+    border: 0 none;
+    height: 24px;
+    text-indent: 25px;
+}
+
+.typeahead__list>li>a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -1,0 +1,27 @@
+﻿@font-face { font-family: schema-glyphs; font-style: normal; font-weight: normal; src:url(../fonts/schema-glyphs-2.ttf) format('truetype') }
+.schema-glyph { font-family: schema-glyphs; font-style: normal; font-variant: normal; font-weight: normal; line-height: 1; text-transform: none; speak: none; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.schema-glyph-help:before { content: "\e607"; }
+.schema-glyph-home:before { content: "\e609"; }
+.schema-glyph-info:before { content: "\e60a"; }
+.schema-glyph-info_outline:before { content: "\e60b"; }
+.schema-glyph-language:before { content: "\e60c"; }
+.schema-glyph-report_problem:before { content: "\e60d"; }
+.schema-glyph-search:before { content: "\e610"; }
+.schema-glyph-menu:before { content: "\e62c"; }
+.schema-glyph-more_horiz:before { content: "\e62d"; }
+.schema-glyph-more_vert:before { content: "\e62e"; }
+.schema-glyph-arrow-left:before { content: "\e094"; }
+.schema-glyph-arrow-right:before { content: "\e095"; }
+.schema-glyph-arrow-up:before { content: "\e096"; }
+.schema-glyph-arrow-down:before { content: "\e097"; }
+.schema-glyph-plus:before { content: "\e114"; }
+.schema-glyph-minus:before { content: "\e115"; }
+.schema-glyph-check2:before { content: "\e116"; }
+.schema-glyph-cross:before { content: "\e117"; }
+.schema-glyph-chevron-down:before { content: "\e604"; }
+.schema-glyph-chevron-right:before { content: "\e606"; }
+.schema-glyph-chevron-thin-down:before { content: "\e600"; }
+.schema-glyph-chevron-thin-left:before { content: "\e601"; }
+.schema-glyph-chevron-thin-right:before { content: "\e602"; }
+.schema-glyph-chevron-thin-up:before { content: "\e603"; }
+.schema-glyph-chevron-up:before { content: "\e608"; }
