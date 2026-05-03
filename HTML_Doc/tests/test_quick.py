@@ -4,9 +4,12 @@
 
 import sys
 import os
+from pathlib import Path
 
-# 确保路径正确
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# 确保路径正确 - 指向 HTML_Doc/ (tests 的父目录，包含 translate 模块)
+_BASE_DIR = Path(__file__).resolve().parent.parent  # tests -> HTML_Doc
+sys.path.insert(0, str(_BASE_DIR))
+os.chdir(str(_BASE_DIR))
 
 # 修复Windows编码
 if sys.platform == 'win32':
@@ -26,8 +29,7 @@ args = parse_arguments()
 print(f"✅ 参数解析成功: {args}")
 
 print("\n=== 测试3: 检查目录 ===")
-from pathlib import Path
-base_dir = Path(__file__).parent
+base_dir = _BASE_DIR
 input_dir = base_dir / 'en-US'
 output_dir = base_dir / 'zh-CN'
 print(f"输入目录: {input_dir}")

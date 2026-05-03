@@ -1,8 +1,23 @@
 """验证修复：重试/跳过/降级三条路径"""
 import sys
+import os
 import time
-sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
+# ========== 路径配置 ==========
 from pathlib import Path
+_BASE_DIR = Path(__file__).resolve().parent.parent  # tests -> HTML_Doc
+sys.path.insert(0, str(_BASE_DIR))
+os.chdir(str(_BASE_DIR))
+
+# Windows编码修复
+sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
+# 导入模块（从 translate 包）
+from translate.translator_engine import (
+    TranslatorEngine, GoogleTranslationBackend,
+    YoudaoTranslationBackend, RETRYABLE_EXCEPTIONS
+)
+import requests.exceptions as rex
 
 print("=" * 60)
 print("修复验证测试 - 3条路径")
@@ -10,7 +25,8 @@ print("=" * 60)
 
 # ==================== 路径1: 跳过检测 (glossary覆盖/占位符过多/混合文本) ====================
 print("\n--- [路径1] 跳过检测 ---")
-from translator_engine import TranslatorEngine
+
+_GLOSSARY_PATH = _BASE_DIR / 'translate' / 'glossary.csv'
 
 
 class MockBackend:
@@ -29,7 +45,7 @@ class MockBackend:
 # 1a: 占位符密度 > 50% → 跳过API
 engine_skip = TranslatorEngine(
     backend=MockBackend(),
-    glossary_path=Path('glossary.csv')
+    glossary_path=_GLOSSARY_PATH
 )
 result_pure_var = engine_skip.translate_text("HCcl__VAR_000__ / HCcl__VAR_001__ / HCcl__VAR_002__")
 api_calls_after_var = engine_skip.backend.call_count
@@ -39,7 +55,7 @@ print(f"  1a. 纯变量文本: API调用={api_calls_after_var} (期望0) → {'�
 mixed_backend = MockBackend()
 engine_mixed = TranslatorEngine(
     backend=mixed_backend,
-    glossary_path=Path('glossary.csv')
+    glossary_path=_GLOSSARY_PATH
 )
 result_mixed = engine_mixed.translate_text("05 Basic 应用 functions")
 api_calls_after_mixed = mixed_backend.call_count
@@ -49,7 +65,7 @@ print(f"  1b. 混合文本: API调用={api_calls_after_mixed} (期望0) → {'�
 short_backend = MockBackend()
 engine_short = TranslatorEngine(
     backend=short_backend,
-    glossary_path=Path('glossary.csv')
+    glossary_path=_GLOSSARY_PATH
 )
 result_short = engine_short.translate_text("__PN_000__")
 api_calls_after_short = short_backend.call_count
@@ -58,9 +74,6 @@ print(f"  1c. 极短文本: API调用={api_calls_after_short} (期望0) → {'�
 
 # ==================== 路径2: 网络错误重试 ====================
 print("\n--- [路径2] 重试机制 ---")
-
-from translator_engine import GoogleTranslationBackend, RETRYABLE_EXCEPTIONS
-import requests.exceptions as rex
 
 
 class FailingGoogleBackend(GoogleTranslationBackend):
@@ -120,6 +133,8 @@ print(f"  2b. 全部失败后返回原文: '{result_fallback}' → "
 # ==================== 路径3: 降级机制 ====================
 print("\n--- [路径3] 降级机制 ---")
 
+import translate.translator_engine as te_module
+
 
 class FailingWithCounter(GoogleTranslationBackend):
     """模拟连续失败的后端（consecutive_failures >= 3）"""
@@ -135,7 +150,7 @@ class FailingWithCounter(GoogleTranslationBackend):
         raise ConnectionError("模拟网络断开")
 
 
-from translator_engine import YoudaoTranslationBackend
+# YoudaoTranslationBackend 已在顶部导入
 
 
 class FakeYoudao(YoudaoTranslationBackend):
@@ -146,13 +161,12 @@ class FakeYoudao(YoudaoTranslationBackend):
 
 
 # 替换Youdao为FakeYoudao用于测试
-import translator_engine as te_module
 _OriginalYoudao = te_module.YoudaoTranslationBackend
 te_module.YoudaoTranslationBackend = FakeYoudao
 
 engine_fallback = TranslatorEngine(
     backend=FailingWithCounter(),
-    glossary_path=Path('glossary.csv')
+    glossary_path=_GLOSSARY_PATH
 )
 result_fb = engine_fallback.translate_text("Hello world test")
 te_module.YoudaoTranslationBackend = _OriginalYoudao  # 恢复原始类

@@ -1,9 +1,18 @@
 """测试优化后的翻译引擎"""
 import sys
-sys.stdout.reconfigure(encoding='utf-8', errors='replace')
-from pathlib import Path
+import os
 
-from translator_engine import TranslatorEngine
+# ========== 路径配置 ==========
+from pathlib import Path
+_BASE_DIR = Path(__file__).resolve().parent.parent  # tests -> HTML_Doc
+sys.path.insert(0, str(_BASE_DIR))
+os.chdir(str(_BASE_DIR))
+
+# Windows编码修复
+sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
+# 导入模块（从 translate 包）
+from translate.translator_engine import TranslatorEngine
 
 print('=' * 60)
 print('优化后的翻译引擎测试')
@@ -22,7 +31,7 @@ class MockBackend:
 # 创建引擎
 engine = TranslatorEngine(
     backend=MockBackend(),
-    glossary_path=Path('glossary.csv')
+    glossary_path=_BASE_DIR / 'translate' / 'glossary.csv'
 )
 
 stats = engine.get_statistics()

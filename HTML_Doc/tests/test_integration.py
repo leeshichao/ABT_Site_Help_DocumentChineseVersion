@@ -11,13 +11,24 @@
 """
 
 import sys
+import os
 import tempfile
 from pathlib import Path
+
+# ========== 路径配置 ==========
+# 确保能找到 translate 模块（tests 的父目录是 HTML_Doc）
+_BASE_DIR = Path(__file__).resolve().parent.parent  # tests -> HTML_Doc
+sys.path.insert(0, str(_BASE_DIR))
+os.chdir(str(_BASE_DIR))
 
 # Windows编码修复
 if sys.platform == 'win32':
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
+# 导入模块（从 translate 包）
+from translate.html_parser import HTMLParser
+from translate.translator_engine import create_translator
 
 
 def test_real_file_parsing():
@@ -25,10 +36,8 @@ def test_real_file_parsing():
     print("\n" + "="*70)
     print("📋 测试1: 真实HTML文件解析")
     print("="*70)
-    
-    from html_parser import HTMLParser
-    
-    base_dir = Path(__file__).parent.parent
+
+    base_dir = _BASE_DIR
     test_files = [
         ('en-US/10142381835.html', '简单页面 (~4KB)'),
         ('en-US/10445337867.html', '中等页面 (~55KB, 含表格)'),
@@ -69,15 +78,13 @@ def test_translation_engine():
     print("\n\n" + "="*70)
     print("🔤 测试2: 翻译引擎基本测试")
     print("="*70)
-    
-    from translator_engine import create_translator
-    
-    base_dir = Path(__file__).parent
-    
+
+    base_dir = _BASE_DIR
+
     try:
         translator = create_translator(
             backend_type='google',
-            glossary_path=base_dir / 'glossary.csv',
+            glossary_path=base_dir / 'translate' / 'glossary.csv',
             use_free_api=True
         )
         
@@ -119,12 +126,10 @@ def test_full_pipeline():
     print("\n\n" + "="*70)
     print("🚀 测试3: 完整翻译流程（单文件）")
     print("="*70)
-    
-    from html_parser import HTMLParser
-    from translator_engine import create_translator
+
     import tempfile
-    
-    base_dir = Path(__file__).parent.parent
+
+    base_dir = _BASE_DIR
     input_file = base_dir / 'en-US' / '10142381835.html'
     
     if not input_file.exists():
@@ -150,7 +155,7 @@ def test_full_pipeline():
             # 步骤2: 翻译
             translator = create_translator(
                 backend_type='google',
-                glossary_path=Path(__file__).parent / 'glossary.csv',
+                glossary_path=_BASE_DIR / 'translate' / 'glossary.csv',
                 use_free_api=True
             )
             
