@@ -1,10 +1,16 @@
 ---
-name: Custom issue template
-about: Describe this issue template's purpose here.
-title: ''
-labels: ''
+name: 其他问题
+about: 提交一个不属于 Bug 或功能请求的问题
+title: ""
+labels: "question"
 assignees: ''
 
 ---
 
+**您遇到了什么问题？**
 
+请在这里详细描述您的问题或建议。
+
+**相关背景**
+
+如果可能，请提供相关的背景信息或截图，以便我们更好地理解。
