@@ -120,7 +120,8 @@ def safe_read_file(file_path: Union[str, Path], encoding: str = 'utf-8') -> str:
         except Exception as e:
             raise IOError(f"读取文件失败 [{enc}]: {path} | {e}")
     
-    raise UnicodeDecodeError(f"无法解码文件: {path}", b'', 0, 1, reason='unsupported encoding')
+    # 当所有编码都尝试失败后，抛出正确的异常
+    raise UnicodeDecodeError("unknown", b'', 0, 0, f"无法使用任何备选编码解码文件: {path}")
 
 
 def safe_write_file(file_path: Union[str, Path], content: str, encoding: str = 'utf-8') -> None:
@@ -252,20 +253,22 @@ def retry_with_backoff(func, max_retries: int = 3, initial_delay: float = 1.0,
     Returns:
         func的返回值
     """
-    last_exception = None
     delay = initial_delay
     
-    for attempt in range(max_retries + 1):
+    for attempt in range(max_retries):
         try:
             return func()
         except exceptions as e:
-            last_exception = e
-            if attempt < max_retries:
-                logging.warning(f"第{attempt + 1}次尝试失败: {e} | {delay:.1f}s后重试...")
-                time.sleep(delay)
-                delay *= backoff_factor
-    
-    raise last_exception
+            logging.warning(f"第 {attempt + 1}/{max_retries + 1} 次尝试失败: {e}. 等待 {delay:.1f}s 后重试...")
+            time.sleep(delay)
+            delay *= backoff_factor
+            
+    # 最后一次尝试
+    try:
+        return func()
+    except exceptions as e:
+        logging.error(f"所有 {max_retries + 1} 次尝试均失败。")
+        raise e
 
 
 class Timer:

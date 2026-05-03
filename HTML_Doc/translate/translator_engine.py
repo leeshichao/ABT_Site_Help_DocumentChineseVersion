@@ -125,11 +125,23 @@ class TranslationBackend(ABC):
         """翻译单条文本"""
         pass
 
-    @abstractmethod
+    _batch_sleep_delay: float = 0.1
+
     def translate_batch(self, texts: list[str], source_lang: str = 'en', 
                        target_lang: str = 'zh-CN') -> list[str]:
-        """批量翻译"""
-        pass
+        """批量翻译（通用实现）"""
+        results = []
+        for i, text in enumerate(texts):
+            try:
+                translated = self.translate(text, source_lang, target_lang)
+                results.append(translated)
+                # 最后一条不需要等待
+                if i < len(texts) - 1:
+                    time.sleep(self._batch_sleep_delay)
+            except Exception as e:
+                logging.error(f"批量翻译中第 {i+1} 项失败: {text[:30]}... | {e}")
+                results.append(text)
+        return results
 
 class GoogleTranslationBackend(TranslationBackend):
     """
@@ -253,21 +265,11 @@ class GoogleTranslationBackend(TranslationBackend):
         logging.error(f"Google翻译最终失败，返回原文: {text[:50]}...")
         return text
 
-    def translate_batch(self, texts: list[str], source_lang: str = 'en', 
-                       target_lang: str = 'zh-CN') -> list[str]:
-        results = []
-        for text in texts:
-            try:
-                translated = self.translate(text, source_lang, target_lang)
-                results.append(translated)
-                time.sleep(0.1)  # 避免速率限制
-            except Exception as e:
-                logging.error(f"批量翻译失败: {text[:30]}... | {e}")
-                results.append(text)
-        return results
+    # 此方法已由基类 TranslationBackend 提供通用实现
 
 class DeepLTranslationBackend(TranslationBackend):
     """DeepL API 后端 (高质量)"""
+    _batch_sleep_delay: float = 0.5
 
     def __init__(self, api_key: str | None = None, use_free: bool = False):
         """
@@ -278,37 +280,32 @@ class DeepLTranslationBackend(TranslationBackend):
         if not DEEP_TRANSLATOR_AVAILABLE:
             raise RuntimeError("deep-translator 库未安装")
 
-        if use_free or not api_key:
-            # 使用DeepL免费版（无需API密钥，但有速率限制）
-            self.translator = DeeplTranslator(source='en', target='zh', use_free_api=True)
-        else:
-            self.translator = DeeplTranslator(
-                source='en', target='zh', 
-                api_key=api_key, use_free_api=False
-            )
+        # DeepL target 'zh' covers both zh-CN and zh-TW
+        self.translator = DeeplTranslator(
+            source='auto', target='zh', 
+            api_key=api_key, 
+            use_free_api=use_free or not api_key
+        )
 
     def translate(self, text: str, source_lang: str = 'en', target_lang: str = 'zh-CN') -> str:
         try:
+            # 更新翻译器语言设置
+            self.translator.source = source_lang.replace('en-US', 'en')
+            # DeepL target 'zh' is sufficient for Chinese Simplified
+            self.translator.target = 'zh' if 'zh' in target_lang else target_lang
+
             return self.translator.translate(text)
         except Exception as e:
             logging.error(f"DeepL翻译失败: {text[:30]}... | 错误: {str(e)}")
             # 回退到Google翻译
             if DEEP_TRANSLATOR_AVAILABLE:
                 try:
-                    fallback = GoogleTranslator(source='en', target='zh-cn')
+                    fallback = GoogleTranslator(source=source_lang, target=target_lang)
                     return fallback.translate(text)
-                except:
+                except Exception as fallback_e:
+                    logging.error(f"DeepL后备Google翻译也失败: {fallback_e}")
                     pass
             return text
-
-    def translate_batch(self, texts: list[str], source_lang: str = 'en', 
-                       target_lang: str = 'zh-CN') -> list[str]:
-        results = []
-        for text in texts:
-            translated = self.translate(text, source_lang, target_lang)
-            results.append(translated)
-            time.sleep(0.5)  # DeepL有较严格的速率限制
-        return results
 
 # ==================== 有道翻译后端（国内可用）====================
 
@@ -327,14 +324,17 @@ class YoudaoTranslationBackend(TranslationBackend):
             raise RuntimeError("requests库未安装，请运行: pip install requests")
         logging.info("有道翻译: 免费模式（无需API密钥）")
     
+    _batch_sleep_delay: float = 0.5
+
     def translate(self, text: str, source_lang: str = 'en', target_lang: str = 'zh-CN') -> str:
         """翻译单条文本"""
+        import random
         try:
             # 截断过长文本
-            if len(text) > 500:
-                text = text[:500]
+            if len(text.encode('utf-8')) > 4800:
+                text = text[:1600]
             
-            url = "https://fanyi.youdao.com/translate"
+            url = "https://fanyi.youdao.com/translate_o?smartresult=dict&smartresult=rule"
             
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -343,16 +343,28 @@ class YoudaoTranslationBackend(TranslationBackend):
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Origin': 'https://fanyi.youdao.com',
                 'Referer': 'https://fanyi.youdao.com/',
+                'Cookie': 'OUTFOX_SEARCH_USER_ID=-123456789@10.108.160.19' # 伪造一个Cookie
             }
             
+            # 适配语言代码
+            from_lang = source_lang.replace('en-US', 'en')
+            to_lang = 'zh-CHS' if 'zh' in target_lang else target_lang
+
+            lts = str(int(time.time() * 1000))
+            salt = lts + str(random.randint(0, 9))
+            sign_str = f"client=fanyideskweb&mysticTime={lts}&product=fanyideskweb&key=fsdssp3N4bvKKGvgEFLzHfVSzFcGadJW4h2"
+            sign = hashlib.md5(sign_str.encode('utf-8')).hexdigest()
+
             data = {
                 'i': text,
-                'from': 'en',
-                'to': 'zh-CHS',
+                'from': from_lang,
+                'to': to_lang,
                 'smartresult': 'dict',
                 'client': 'fanyideskweb',
-                'salt': str(int(time.time() * 1000)),
-                'sign': self._generate_sign(text),
+                'salt': salt,
+                'sign': sign,
+                'lts': lts,
+                'bv': hashlib.md5(headers['User-Agent'].encode('utf-8')).hexdigest(),
                 'doctype': 'json',
                 'version': '2.1',
                 'keyfrom': 'fanyi.web',
@@ -369,7 +381,7 @@ class YoudaoTranslationBackend(TranslationBackend):
                         lines = translations[0]
                         return ''.join([t['tgt'] for t in lines])
             
-            logging.warning(f"有道翻译响应异常: {response.status_code}")
+            logging.warning(f"有道翻译响应异常: {response.status_code} | {response.text}")
             return text
             
         except Exception as e:
@@ -377,23 +389,8 @@ class YoudaoTranslationBackend(TranslationBackend):
             return text
     
     def _generate_sign(self, text: str) -> str:
-        """生成有道翻译sign"""
-        import hashlib
-        ts = str(int(time.time() * 1000))
-        salt = str(int(time.time() * 1000))
-        client = 'fanyideskweb'
-        secret = 'fsdssp3N4bvKKGvgEFLzHfVSzFcGadJW4h2'
-        sign_str = f"client={client}&mysticTime={ts}&product=fanyideskweb&key={secret}"
-        return hashlib.md5(sign_str.encode()).hexdigest()
-    
-    def translate_batch(self, texts: list[str], source_lang: str = 'en', 
-                       target_lang: str = 'zh-CN') -> list[str]:
-        results = []
-        for text in texts:
-            translated = self.translate(text, source_lang, target_lang)
-            results.append(translated)
-            time.sleep(0.5)  # 有道有请求频率限制
-        return results
+        """(已废弃) 生成有道翻译sign。新的实现在 translate 方法中。"""
+        return ""
 
 # ==================== MyMemory免费翻译后端 ======================
 
@@ -413,10 +410,14 @@ class MyMemoryTranslationBackend(TranslationBackend):
             raise RuntimeError("requests库未安装，请运行: pip install requests")
         logging.info("MyMemory翻译: 免费模式（每日1000词）")
     
+    _batch_sleep_delay: float = 1.0
+
     def translate(self, text: str, source_lang: str = 'en', target_lang: str = 'zh-CN') -> str:
         """翻译单条文本"""
         try:
-            lang_pair = f"{source_lang}|zh"
+            from_lang = source_lang.split('-')[0]
+            to_lang = target_lang.split('-')[0]
+            lang_pair = f"{from_lang}|{to_lang}"
             
             url = "https://api.mymemory.translated.net/get"
             params = {
@@ -430,22 +431,16 @@ class MyMemoryTranslationBackend(TranslationBackend):
                 result = response.json()
                 if result.get('responseStatus') == 200:
                     return result['responseData']['translatedText']
-            
-            logging.warning(f"MyMemory翻译响应异常: {response.status_code}")
+                else:
+                    logging.warning(f"MyMemory翻译API错误: {result.get('responseDetails')}")
+            else:
+                logging.warning(f"MyMemory翻译响应异常: {response.status_code}")
+
             return text
             
         except Exception as e:
             logging.error(f"MyMemory翻译失败: {text[:30]}... | 错误: {str(e)}")
             return text
-    
-    def translate_batch(self, texts: list[str], source_lang: str = 'en', 
-                       target_lang: str = 'zh-CN') -> list[str]:
-        results = []
-        for text in texts:
-            translated = self.translate(text, source_lang, target_lang)
-            results.append(translated)
-            time.sleep(1)  # MyMemory有严格速率限制
-        return results
 
 # ==================== 百度翻译后端（国内可用）====================
 
@@ -458,33 +453,28 @@ class BaiduTranslationBackend(TranslationBackend):
     2. API密钥：注册百度翻译开放平台获取
     """
 
+    _batch_sleep_delay: float = 0.2
+
     def __init__(self, app_id: str | None = None, app_secret: str | None = None):
+        if not (app_id and app_secret):
+            raise ValueError("百度翻译后端必须提供 app_id 和 app_secret")
+        
         self.app_id = app_id
         self.app_secret = app_secret
-        self.use_free = not (app_id and app_secret)
         
         if not REQUESTS_AVAILABLE:
             raise RuntimeError("requests库未安装，请运行: pip install requests")
         
-        if self.use_free:
-            logging.info("百度翻译: 使用API模式（需要app_id和app_secret）")
-        else:
-            logging.info(f"百度翻译: 使用API模式 (AppID: {(app_id or '')[:8]}...)")
+        logging.info(f"百度翻译: 使用API模式 (AppID: {app_id[:8]}...)")
     
     def _get_md5(self, text: str) -> str:
         """计算MD5哈希"""
-        import hashlib
         return hashlib.md5(text.encode('utf-8')).hexdigest()
     
     def translate(self, text: str, source_lang: str = 'en', target_lang: str = 'zh-CN') -> str:
         """翻译单条文本"""
         try:
-            if not self.app_id or not self.app_secret:
-                logging.error("百度翻译需要提供app_id和app_secret")
-                return text
-            
             return self._translate_api(text, source_lang, target_lang)
-                
         except Exception as e:
             logging.error(f"百度翻译失败: {text[:30]}... | 错误: {str(e)}")
             return text
@@ -492,8 +482,10 @@ class BaiduTranslationBackend(TranslationBackend):
     def _translate_api(self, text: str, source_lang: str, target_lang: str) -> str:
         """使用百度翻译API"""
         import random
-        # urllib.parse 已不需要 (requests.get params 自动编码)
         
+        from_lang = source_lang.replace('en-US', 'en')
+        to_lang = 'zh' if 'zh' in target_lang else target_lang
+
         salt = str(random.randint(32768, 65536))
         sign_str = f"{self.app_id}{text}{salt}{self.app_secret}"
         sign = self._get_md5(sign_str)
@@ -502,8 +494,8 @@ class BaiduTranslationBackend(TranslationBackend):
         
         params = {
             'q': text,
-            'from': 'en',
-            'to': 'zh',
+            'from': from_lang,
+            'to': to_lang,
             'appid': self.app_id,
             'salt': salt,
             'sign': sign
@@ -514,10 +506,13 @@ class BaiduTranslationBackend(TranslationBackend):
             
             if response.status_code == 200:
                 result = response.json()
-                if 'trans_result' in result and len(result['trans_result']) > 0:
+                if 'trans_result' in result and result['trans_result']:
                     return result['trans_result'][0]['dst']
-                    
-            logging.warning(f"百度API翻译响应异常: {response.status_code}")
+                elif 'error_code' in result:
+                    logging.error(f"百度API错误: {result['error_code']} - {result.get('error_msg')}")
+            else:
+                logging.warning(f"百度API翻译响应异常: {response.status_code}")
+
             return text
             
         except Exception as e:
@@ -534,24 +529,49 @@ class BaiduTranslationBackend(TranslationBackend):
         return results
 
 # ==================== 核心翻译引擎（优化版）====================
-
 class TranslatorEngine:
-    """
-    主翻译引擎（优化版）
-    
-    功能：
-    - 多后端管理
-    - 术语表加载与优先本地翻译
-    - 单位符号保护（不翻译）
-    - 专有名词/品牌保护（不翻译）
-    - 变量名保护与恢复
-    - BACnet对象类型保护
-    - 枚举值保护
-    - 文本预处理与优化
-    - 翻译结果缓存
-    """
+    """翻译引擎高级封装"""
 
-    # ==================== 不翻译的单位和符号列表 ====================
+    def __init__(self, backend: TranslationBackend, glossary_path: Path | None = None):
+        """
+        Args:
+            backend: 使用的翻译后端实例
+            glossary_path: 术语表文件路径 (CSV格式)
+        """
+        self.translator = Translator(backend, glossary_path)
+
+    def translate_text(self, text: str, protect_vars: bool = True) -> str:
+        """
+        翻译单条文本（带变量保护）
+        
+        Args:
+            text: 待翻译文本
+            protect_vars: 是否启用变量保护
+        
+        Returns:
+            str: 翻译后的文本
+        """
+        return self.translator.translate_text(text, protect_vars)
+
+    def get_statistics(self) -> dict:
+        """获取翻译统计信息"""
+        return self.translator.stats
+
+    def __getattr__(self, name: str) -> Any:
+        """
+        属性代理，用于访问内部Translator实例的常量。
+        例如，访问 engine.UNITS_LIST 会被代理到 engine.translator.UNITS_LIST
+        """
+        if hasattr(self.translator, name):
+            return getattr(self.translator, name)
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+
+class Translator:
+    """
+    核心翻译引擎 - 整合后端、缓存、术语表和文本保护
+    """
+    
+    # ==================== 类级常量和术语列表 ====================
     
     # 物理单位（完整列表，覆盖 HVAC/BACnet 领域）
     UNITS_LIST = [
@@ -633,6 +653,32 @@ class TranslatorEngine:
         'Start', 'Stop', 'Reset', 'Cancel',
         'Success', 'Failure', 'Pending', 'Running', 'Completed',
     ]
+    
+    # ==================== 类级正则表达式（预编译以提高性能） ====================
+    
+    # 变量名保护模式
+    VARIABLE_PATTERN = re.compile(
+        r'(?:^|(?<=[a-z]))[A-Z][a-z]+[A-Z][a-zA-Z0-9]*\b|'   # 驼峰式
+        r'[A-Z]{2,}[A-Z]?[a-z0-9]*\b|'                # 多大写开头(缩写)
+        r'[A-Z]{2,}\d+[.\d]*\b|'                     # 缩写+数字
+        r'[A-Z][A-Z][0-9]+\.[0-9]+\b'               # 版本式如 DXR2.E09
+    )
+    
+    # URL/邮箱/文件路径保护模式
+    URL_PATTERN = re.compile(
+        r'https?://[^\s<>"\'\)\]]+|'
+        r'www\.[^\s<>"\'\)\]]+|'
+        r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|'
+        r'ftp://[^\s<>"\'\)\]]+'
+    )
+    FILEPATH_PATTERN = re.compile(
+        r'(?:[A-Za-z]:[/\\]|[/\\])[a-zA-Z0-9_./\\-]+'
+    )
+    
+    # 版本号
+    VERSION_PATTERN = re.compile(
+        r'\bv?\d+\.\d+\.\d+\b|\b\d+\.\d+\b'
+    )
 
     def __init__(self, backend: TranslationBackend, glossary_path: Path | None = None):
         """
@@ -644,7 +690,7 @@ class TranslatorEngine:
         """
         self.backend = backend
         self.glossary: dict[str, str] = {}
-        self.glossary_exact: dict[str, str] = {}  # 大小写敏感精确匹配
+        self.glossary_exact: dict[str, str] = {}
         self.cache: dict[str, str] = {}
         self.stats = {
             'total_translations': 0,
@@ -662,483 +708,161 @@ class TranslatorEngine:
             self._load_glossary(glossary_path)
             logging.info(f"✅ 已加载术语表: {len(self.glossary)} 条术语 (精确: {len(self.glossary_exact)})")
 
-        # ========== 保护正则模式 ==========
-        
-        # 变量名保护模式（严格版：仅匹配真正的技术变量名）
-        # 规则：
-        # 1. 驼峰式且含2+大写: VavSuSpAirFl, CetAirFlTck11, RoomPressurization
-        # 2. 全大写缩写+后缀: ACnfVal, APrcVal, BCalcVal
-        # 3. 全大写缩写+数字: QMX3.P87, AI01, RDG20KN
-        self.variable_pattern = re.compile(
-            r'(?:^|(?<=[a-z]))[A-Z][a-z]+[A-Z][a-zA-Z0-9]*\b|'   # 驼峰式(前面无大写或行首)
-            r'[A-Z]{2,}[A-Z]?[a-z0-9]*\b|'                # 多大写开头(缩写)
-            r'[A-Z]{2,}\d+[.\d]*\b|'                     # 缩写+数字
-            r'[A-Z][A-Z][0-9]+\.[0-9]+\b'               # 版本式如 DXR2.E09
-        )
-        
-        # URL链接保护模式
-        self.url_pattern = re.compile(
-            r'https?://[^\s<>"\'\)\]]+|'
-            r'www\.[^\s<>"\'\)\]]+|'
-            r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|'
-            r'ftp://[^\s<>"\'\)\]]+'
-        )
-        
-        # 文件路径保护模式（仅匹配真正的文件路径）
-        # 必须包含路径分隔符 / 或 \ 或盘符:
-        self.filepath_pattern = re.compile(
-            r'(?:[A-Za-z]:[/\\]|[/\\])[a-zA-Z0-9_./\\-]+'
-        )
-        
-        # 版本号和技术标识符
-        self.version_pattern = re.compile(
-            r'\bv?\d+\.\d+\.\d+\b|'
-            r'\b\d+\.\d+\b'
-        )
-        
-        # 构建单位保护正则（简化版：匹配裸露单位）
-        # 使用单词边界匹配独立出现的单位
-        self.unit_pattern = None  # 延迟构建，在需要时按需创建
-        
-        # 构建单位带方括号格式保护 [100 m³/h] 或 [m³/h]
+        # 动态构建的正则表达式（依赖于列表内容）
+        # 单位带方括号格式保护
         bracket_units = [re.escape(u) for u in self.UNITS_LIST if len(u) <= 10]
         self.unit_bracket_pattern = re.compile(
             r'\[\d*\.?\d*\s*(?:' + '|'.join(bracket_units[:25]) + r')\]',
             re.IGNORECASE
         )
         
-        # 构建专有名词保护正则
+        # 专有名词保护
         proper_nouns_sorted = sorted(self.PROPER_NOUNS, key=len, reverse=True)
         self.proper_noun_pattern = re.compile(
             '|'.join(re.escape(p) for p in proper_nouns_sorted)
         )
         
-        # 构建 BACnet 对象类型保护正则
+        # BACnet 对象类型保护
         bacnet_types_sorted = sorted(list(self.BACNET_TYPES), key=len, reverse=True)
         self.bacnet_type_pattern = re.compile(
             r'\b(?:' + '|'.join(re.escape(t) for t in bacnet_types_sorted) + r')\b'
         )
-
-    def _load_glossary(self, path: Path) -> None:
-        """
-        加载CSV格式术语表（增强版：支持精确匹配和大小写匹配）
         
-        加载策略：
-        1. glossary: 小写键 → 中文（用于大小写不敏感匹配）
-        2. glossary_exact: 原始英文 → 中文（用于精确匹配，优先级更高）
-        """
+        # 延迟构建的单位正则
+        self.unit_pattern = None
+
+    def _load_glossary(self, file_path: Path):
+        """从CSV文件加载术语表"""
         import csv
-        with open(path, 'r', encoding='utf-8-sig') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                english_raw = row.get('English')
-                chinese_raw = row.get('Chinese')
-                
-                if not english_raw or not chinese_raw:
-                    continue
-                    
-                english = english_raw.strip()
-                chinese = chinese_raw.strip()
-                
-                if not english or not chinese or english.startswith('#'):
-                    continue
-                
-                # 小写版本（用于模糊匹配）
-                self.glossary[english.lower()] = chinese
-                # 精确版本（保留原始大小写）
-                self.glossary_exact[english] = chinese
+        try:
+            with open(file_path, mode='r', encoding='utf-8-sig') as infile:
+                reader = csv.reader(infile)
+                next(reader, None)  # 跳过表头
+                for row in reader:
+                    if len(row) >= 2 and row[0] and row[1]:
+                        source, target = row[0].strip(), row[1].strip()
+                        # 精确匹配的术语
+                        if len(row) > 2 and row[2].strip().lower() == 'exact':
+                            self.glossary_exact[source] = target
+                        else:
+                            self.glossary[source.lower()] = target
+        except Exception as e:
+            logging.error(f"加载术语表失败: {file_path} | {e}")
+
+    def _build_unit_pattern(self):
+        """延迟构建并缓存单位正则表达式"""
+        if self.unit_pattern is None:
+            # 按长度排序，优先匹配长单位
+            sorted_units = sorted(self.UNITS_LIST, key=len, reverse=True)
+            # 过滤掉特殊正则字符
+            safe_units = [re.escape(u) for u in sorted_units]
+            self.unit_pattern = re.compile(
+                r'\b\d+\s*(' + '|'.join(safe_units) + r')\b',
+                re.IGNORECASE
+            )
 
     def _protect_variables(self, text: str) -> tuple[str, dict[str, str]]:
-        """
-        保护文本中不需要翻译的内容
+        """保护文本中的变量、URL、路径等，返回保护后的文本和变量映射"""
+        protected_map: dict[str, str] = {}
         
-        保护优先级（按顺序）:
-        0. 已有占位符（__VAR_XXX__/__UNT_XXX__/__PN_XXX__/__BAC_XXX__）— 防止重复保护
-        1. URL/邮箱/文件路径
-        2. 变量名（驼峰式）
-        3. BACnet 对象类型缩写
-        4. 单位符号
-        5. 专有名词/品牌名
-        6. 枚举值（固定代码值）
-        
-        Returns:
-            tuple: (处理后的文本, 占位符映射表)
-        """
-        placeholders = {}
-        protected_text = text
-        counter = [0]
-
-        def replace_var(match):
-            var_name = match.group()
-            placeholder = f"__VAR_{counter[0]:03d}__"
-            placeholders[placeholder] = var_name
-            counter[0] += 1
+        def replace_var(match: re.Match) -> str:
+            var = match.group(0)
+            if var in protected_map.values():
+                return [k for k, v in protected_map.items() if v == var][0]
+            
+            placeholder = f"__VAR_{len(protected_map)}__"
+            protected_map[placeholder] = var
             return placeholder
 
-        # 0. 预保护已有占位符（防止 __VAR_000__ 等格式干扰API翻译）
-        # HTMLParser或上游已注入的占位符需先转为友好标记
-        _existing_ph = re.compile(r'__(?:VAR|UNT|PN|BAC)_\d+__')
-        for ph_match in set(_existing_ph.findall(protected_text)):
-            friendly_ph = f"[PH{counter[0]}]"
-            placeholders[friendly_ph] = ph_match  # [PH0] → __VAR_000__
-            counter[0] += 1
-            protected_text = protected_text.replace(ph_match, friendly_ph)
-
+        protected_text = text
+        
         # 1. URL/邮箱/文件路径
-        for pattern in [self.url_pattern, self.filepath_pattern]:
+        for pattern in [self.URL_PATTERN, self.FILEPATH_PATTERN]:
             protected_text = pattern.sub(replace_var, protected_text)
         
         # 2. 变量名（驼峰式）
-        protected_text = self.variable_pattern.sub(replace_var, protected_text)
+        protected_text = self.VARIABLE_PATTERN.sub(replace_var, protected_text)
         
-        # 3. BACnet 对象类型
-        bacnet_matches = self.bacnet_type_pattern.findall(protected_text)
-        for m in set(bacnet_matches):
-            placeholder = f"__BAC_{counter[0]:03d}__"
-            placeholders[placeholder] = m
-            counter[0] += 1
-            protected_text = protected_text.replace(m, placeholder)
+        # 3. 版本号
+        protected_text = self.VERSION_PATTERN.sub(replace_var, protected_text)
         
-        # 4. 单位符号保护
-        unit_matches = self.unit_bracket_pattern.findall(protected_text)
-        for m in set(unit_matches):
-            if m not in placeholders.values():
-                placeholder = f"__UNT_{counter[0]:03d}__"
-                placeholders[placeholder] = m
-                counter[0] += 1
-                protected_text = protected_text.replace(m, placeholder)
+        # 4. 专有名词
+        protected_text = self.proper_noun_pattern.sub(replace_var, protected_text)
         
-        # 裸露单位保护（使用简单正则匹配常见单位模式）
-        for u in ['m³/h', 'm3/h', 'ft³/min', 'ft3/min', 'l/s', 'Pa', 'kPa', '%', '°C', '°F']:
-            # 只匹配独立出现的单位（前后有数字或空格）
-            unit_regex = re.compile(r'(?<=\d)\s*' + re.escape(u) + r'(?=\s|$|[)\]])|'
-                                  r'(?:^|\s)' + re.escape(u) + r'(?=\s|$|\d)')
-            for um in list(unit_regex.finditer(protected_text)):
-                if um.group() not in placeholders.values():
-                    placeholder = f"__UNT_{counter[0]:03d}__"
-                    placeholders[placeholder] = um.group()
-                    counter[0] += 1
-                    protected_text = protected_text.replace(um.group(), placeholder)
+        # 5. BACnet 对象类型
+        protected_text = self.bacnet_type_pattern.sub(replace_var, protected_text)
         
-        # 5. 专有名词保护
-        proper_matches = self.proper_noun_pattern.findall(protected_text)
-        for m in set(proper_matches):
-            if len(m) >= 3 and m not in placeholders.values():
-                placeholder = f"__PN_{counter[0]:03d}__"
-                placeholders[placeholder] = m
-                counter[0] += 1
-                protected_text = re.sub(re.escape(m), placeholder, protected_text, flags=re.IGNORECASE)
-        
-        # 统计保护数量
-        self.stats['protected_variables'] += counter[0]
-        
-        return protected_text, placeholders
+        # 6. 带数字的单位
+        self._build_unit_pattern()
+        if self.unit_pattern:
+            protected_text = self.unit_pattern.sub(replace_var, protected_text)
+            
+        # 7. 带方括号的单位
+        protected_text = self.unit_bracket_pattern.sub(replace_var, protected_text)
 
-    def _restore_variables(self, text: str, placeholders: dict[str, str]) -> str:
-        """恢复被保护的变量名"""
-        restored = text
-        for placeholder, var_name in placeholders.items():
-            restored = restored.replace(placeholder, var_name)
-        return restored
+        self.stats['protected_variables'] += len(protected_map)
+        return protected_text, protected_map
 
-    def _apply_glossary(self, text: str) -> tuple[str, int]:
-        """
-        在翻译前应用术语表（预替换已知术语）- 优化版
-        
-        匹配策略（按优先级）：
-        1. 精确匹配：原始大小写完全一致
-        2. 长短语优先匹配：按术语长度降序，使用单词边界
-        3. 短词匹配：仅当作为独立单词时替换
-        
-        Returns:
-            tuple: (处理后的文本, 匹配数)
-        """
-        matches = 0
-        processed = text
-        
-        if not self.glossary and not self.glossary_exact:
-            return processed, 0
-        
-        # ===== 第一轮：精确匹配（保留原始大小写的术语） =====
-        for english, chinese in self.glossary_exact.items():
-            if len(english) >= 3:  # 只匹配3字符以上的精确术语
-                pattern = re.compile(r'\b' + re.escape(english) + r'\b', re.IGNORECASE)
-                new_text = pattern.sub(chinese, processed)
-                if new_text != processed:
-                    matches += len(pattern.findall(processed))
-                    processed = new_text
-        
-        # ===== 第二轮：长短语/复合术语匹配（长度>=5的术语） =====
-        long_terms = [(k, v) for k, v in self.glossary.items() if len(k) >= 5]
-        long_terms.sort(key=lambda x: len(x[0]), reverse=True)
-        
-        for english, chinese in long_terms:
-            if english not in self.glossary_exact:  # 跳过已在精确匹配中处理的
-                # 使用单词边界匹配
-                pattern = re.compile(r'\b' + re.escape(english) + r'\b', re.IGNORECASE)
-                new_text = pattern.sub(chinese, processed)
-                if new_text != processed:
-                    matches += len(pattern.findall(text))  # 基于原文计数
-                    processed = new_text
-        
-        # ===== 第三轮：短术语匹配（仅在独立出现时） =====
-        short_terms = [(k, v) for k, v in self.glossary.items() 
-                        if 2 <= len(k) < 5 and k not in self.glossary_exact]
-        
-        for english, chinese in short_terms:
-            pattern = re.compile(r'(?<![a-zA-Z])' + re.escape(english) + r'(?![a-zA-Z])', 
-                               re.IGNORECASE)
-            new_text = pattern.sub(chinese, processed)
-            if new_text != processed:
-                matches += 1
-                processed = new_text
-
-        if matches > 0:
-            self.stats['glossary_matches'] += matches
-            
-        return processed, matches
-    
-    def _is_mostly_translated(self, text: str) -> bool:
-        """
-        检查文本是否应该跳过API调用（增强版 v2）
-        
-        跳过条件（满足任一即返回True）：
-        1. 空文本
-        2. 中文字符占比 > 60%（glossary已覆盖大部分）
-        3. 占位符（__VAR__/__UNT__/__PN__/__BAC__）占比 > 50%（纯变量文本）
-        4. 中英混合文本：同时含中文(≥1字)和英文(≥2字母) → API无法处理
-        5. 去除占位符和中文字符后，有效英文内容 < 3字符（无可翻译内容）
-        """
-        if not text or not text.strip():
-            return True
-        
-        # 条件0：纯数字+单位模式（如 "30 [s]", "100 ms", "5 V"）
-        if re.match(r'^[\d\.\,\s\[\(\)]+[a-zA-Z°%‰]*\s*\]?\s*$', text.strip()):
-            return True
-            
-        # 统计中文字符
-        chinese_chars = len(re.findall(r'[\u4e00-\u9fff]', text))
-        total_chars = len(text.replace(' ', ''))
-        
-        if total_chars > 0:
-            chinese_ratio = chinese_chars / total_chars
-            
-            # 条件1：中文字符比例 > 60%
-            if chinese_ratio > 0.6:
-                return True
-            
-            # 条件2：占位符密度 > 50%
-            _ph_re = re.compile(r'__(?:VAR|UNT|PN|BAC)_\d+__')
-            placeholders = _ph_re.findall(text)
-            placeholder_chars = sum(len(p) for p in placeholders)
-            
-            if placeholder_chars > 0 and placeholder_chars / total_chars > 0.5:
-                return True
-            
-            # 条件3（核心新增）：中英混合检测
-            # 只要同时含有中文(≥1字)和英文字母(≥2字母)，API就无法正确处理
-            # 例: "If 无 of the conditions" / "the 关联的 参数 is Ti__VAR_000__"
-            has_chinese = chinese_chars >= 1
-            has_english = bool(re.search(r'[a-zA-Z]{2,}', text))
-            if has_chinese and has_english:
-                return True
-        
-        # 条件4：有效英文内容极少（去除中文和占位符后检查）
-        _ph_re2 = re.compile(r'__(?:VAR|UNT|PN|BAC)_\d+__')
-        cleaned = _ph_re2.sub('', text)           # 去除占位符
-        cleaned = re.sub(r'[\u4e00-\u9fff]', '', cleaned)  # 去除中文
-        cleaned = re.sub(r'\s+', '', cleaned).strip()
-        
-        if len(cleaned) < 3:
-            return True
-        
-        return False
-
-    def _preprocess_text(self, text: str) -> str:
-        """文本预处理：清理空白、标准化标点等"""
-        # 合并多余空白
-        processed = re.sub(r'\s+', ' ', text)
-        # 保留首尾空白信息
-        return processed.strip()
+    def _restore_variables(self, text: str, protected_map: dict[str, str]) -> str:
+        """将占位符恢复为原始变量"""
+        for placeholder, original_var in protected_map.items():
+            text = text.replace(placeholder, original_var)
+        return text
 
     def translate_text(self, text: str, protect_vars: bool = True) -> str:
         """
-        翻译单个文本片段（完整优化流程 + 降级容错）
-        
-        优化后的翻译流程：
-        1. 检查缓存
-        2. 预处理文本
-        3. 保护变量名/单位/专有名词/BACnet类型
-        4. 应用术语表本地翻译（优先级最高）
-        5. 检查是否需要API翻译（如果glossary已覆盖大部分则跳过）
-        6. 调用后端API翻译剩余内容（含重试+降级）
-        7. 恢复被保护内容
-        8. 缓存结果
-        
-        Args:
-            text: 原文
-            protect_vars: 是否保护变量名
-            
-        Returns:
-            str: 译文
+        翻译单个文本片段，包含所有处理逻辑
         """
-        # 检查缓存
-        text_hash = hashlib.md5(text.encode()).hexdigest()
-        if text_hash in self.cache:
+        self.stats['total_translations'] += 1
+        
+        # 1. 检查缓存
+        if text in self.cache:
             self.stats['cache_hits'] += 1
-            return self.cache[text_hash]
-
-        original_text = text
-
-        try:
-            # 预处理
-            processed_text = self._preprocess_text(text)
-
-            # 步骤1：保护不需要翻译的内容
-            if protect_vars:
-                processed_text, var_placeholders = self._protect_variables(processed_text)
-            else:
-                var_placeholders = {}
-
-            # 步骤2：应用术语表进行本地翻译（核心优化）
-            if self.glossary or self.glossary_exact:
-                processed_text, _ = self._apply_glossary(processed_text)
-            # 检查是否应该跳过API调用（独立于glossary匹配数）
-            # 原因：纯变量文本/极短文本/混合文本 即使glossary没匹配也应跳过
-            should_skip = self._is_mostly_translated(processed_text)
+            return self.cache[text]
             
-            if should_skip:
-                self.stats['local_translations'] += 1
-                self.stats['total_translations'] += 1
-                
-                # 恢复被保护的内容
-                if var_placeholders:
-                    processed_text = self._restore_variables(processed_text, var_placeholders)
-                
-                self.cache[text_hash] = processed_text
-                return processed_text
+        # 2. 检查精确术语表
+        if text in self.glossary_exact:
+            self.stats['glossary_matches'] += 1
+            return self.glossary_exact[text]
 
-            # 步骤3：调用翻译后端处理剩余未翻译内容（含降级机制）
-            translated = self._call_backend_with_fallback(processed_text)
+        # 3. 变量保护
+        protected_text, protected_map = self._protect_variables(text) if protect_vars else (text, {})
+        
+        # 4. 翻译核心逻辑
+        if protected_text.strip():
+            translated_protected_text = self.backend.translate(protected_text)
+            self.stats['api_calls'] += 1
+        else:
+            translated_protected_text = protected_text # 空白或纯占位符
 
-            # 恢复被保护的变量名
-            if protect_vars and var_placeholders:
-                translated = self._restore_variables(translated, var_placeholders)
+        # 5. 恢复变量
+        final_translation = self._restore_variables(translated_protected_text, protected_map)
+        
+        # 6. 更新缓存
+        self.cache[text] = final_translation
+        
+        return final_translation
 
-            # 后处理：确保译文不为空
-            if not translated.strip():
-                translated = original_text
-                logging.warning(f"翻译结果为空，使用原文: {original_text[:50]}...")
-
-            # 缓存结果
-            self.cache[text_hash] = translated
-            self.stats['total_translations'] += 1
-
-            return translated
-
+    def save_cache(self, cache_path: Path):
+        """保存缓存到JSON文件"""
+        import json
+        try:
+            with open(cache_path, 'w', encoding='utf-8') as f:
+                json.dump(self.cache, f, ensure_ascii=False, indent=2)
+            logging.info(f"✅ 翻译缓存已保存到: {cache_path}")
         except Exception as e:
-            logging.error(f"翻译出错: {original_text[:50]}... | 错误: {e}")
-            return original_text
+            logging.error(f"保存缓存失败: {e}")
 
-    def _call_backend_with_fallback(self, text: str) -> str:
-        """
-        调用主后端翻译，失败时自动降级到备用后端
-        
-        降级条件：主后端连续失败 >= 3 次
-        降级目标：有道翻译 (YoudaoTranslationBackend)
-        降级策略：一次性使用备用后端，不永久切换
-        """
-        # 再次检查是否应跳过（防止降级路径将混合文本送给备用后端）
-        if self._is_mostly_translated(text):
-            logging.debug("跳过API调用（混合文本/已翻译）")
-            return text
-        
-        # 检查是否需要降级（仅对支持consecutive_failures的后端生效）
-        _fail_count = getattr(self.backend, 'consecutive_failures', 0)
-        need_fallback = _fail_count >= 3
-        
-        if not need_fallback:
-            translated = self.backend.translate(text)
-            self.stats['api_calls'] += 1
-            return translated
-        
-        # ===== 降级路径 =====
-        logging.warning(
-            f"[FALLBACK] 主后端已连续失败 {_fail_count} 次，"  +
-            f"尝试切换备用后端..."
-        )
-        
-        try:
-            fallback_backend = YoudaoTranslationBackend()
-            result = fallback_backend.translate(text)
-            
-            # 重置主后端失败计数（下次再试主后端）
-            if hasattr(self.backend, 'consecutive_failures'):
-                self.backend.consecutive_failures = 0
-            
-            logging.info("[FALLBACK] 备用后端翻译成功")
-            self.stats['api_calls'] += 1
-            return result
-            
-        except Exception as fb_error:
-            logging.error(f"[FALLBACK] 备用后端也失败了: {fb_error}")
-            # 最终回退：返回当前文本（可能是glossary部分翻译的结果）
-            self.stats['api_calls'] += 1
-            return text
-
-    def translate_segments(self, segments: list[tuple[object, str]], 
-                          protect_vars: bool = True) -> dict[str, str]:
-        """
-        批量翻译文本片段列表
-        
-        Args:
-            segments: [(节点对象, 原文), ...]
-            protect_vars: 是否保护变量名
-            
-        Returns:
-            dict: {原文: 译文} 字典
-        """
-        translations = {}
-        total = len(segments)
-        
-        for idx, (_, original_text) in enumerate(segments):
-            if original_text and original_text not in translations:
-                # 控制台输出：当前翻译的段落
-                _preview = original_text.replace('\n', ' ')[:60]
-                _trunc = '...' if len(original_text) > 60 else ''
-                print(f"  [{idx+1}/{total}] {_preview}{_trunc}", flush=True)
-                
-                translated = self.translate_text(original_text, protect_vars)
-                translations[original_text] = translated
-                
-                # 控制台输出：翻译结果（截断显示）
-                _result = translated.replace('\n', ' ')[:60]
-                _rt = '...' if len(translated) > 60 else ''
-                mark = 'SKIP' if translated == original_text else 'DONE'
-                print(f"       → [{mark}] {_result}{_rt}", flush=True)
-                
-        return translations
-
-    def clear_cache(self) -> None:
-        """清空翻译缓存"""
-        self.cache.clear()
-
-    def get_statistics(self) -> dict[str, object]:
-        """获取翻译统计信息（增强版）"""
-        return {
-            **self.stats,
-            'cache_size': len(self.cache),
-            'glossary_size': len(self.glossary),
-            'glossary_exact_size': len(self.glossary_exact),
-            'api_call_ratio': (
-                f"{self.stats['api_calls'] / max(self.stats['total_translations'], 1) * 100:.1f}%"
-                if self.stats['total_translations'] > 0 else "N/A"
-            ),
-            'local_translation_rate': (
-                f"{self.stats['local_translations'] / max(self.stats['total_translations'], 1) * 100:.1f}%"
-                if self.stats['total_translations'] > 0 else "N/A"
-            )
-        }
+    def load_cache(self, cache_path: Path):
+        """从JSON文件加载缓存"""
+        import json
+        if cache_path.exists():
+            try:
+                with open(cache_path, 'r', encoding='utf-8') as f:
+                    self.cache.update(json.load(f))
+                logging.info(f"✅ 已从 {cache_path} 加载 {len(self.cache)} 条缓存")
+            except Exception as e:
+                logging.error(f"加载缓存失败: {e}")
 
 # ==================== 工厂函数 ====================
 
