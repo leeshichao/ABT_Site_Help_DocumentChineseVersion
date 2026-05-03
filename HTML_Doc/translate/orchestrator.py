@@ -440,9 +440,6 @@ class TranslationOrchestrator:
             }
         }
         
-        # 打印美观的报告
-        self._print_report(report)
-        
         return report
 
     @staticmethod
