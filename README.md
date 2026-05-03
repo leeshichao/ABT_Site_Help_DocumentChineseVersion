@@ -347,7 +347,11 @@ python -m translate --backend google --proxy http://127.0.0.1:7890
 
 # 测试模式 - 仅翻译前10个文件
 python -m translate --backend youdao --limit 10
+# 测试模式（推荐先试用）
+python -m translate --limit 5 --no-banner --backend mymemory
 
+# 完整翻译（夜间运行）
+python -m translate --workers 4 --no-banner --backend mymemory
 # 自定义术语表
 python -m translate \
   --backend deepl \
@@ -385,7 +389,7 @@ python -m translate --backend youdao --force
 | **总部地址** | Switzerland |
 | **应用领域** | 楼宇自动化 · 智能建筑 · HVAC控制 · 能源管理 |
 | **目标市场** | 全球 (本仓库专注于中国市场) |
-| **版权声明** | © 2014 - 2025 Siemens Schweiz AG |
+| **版权声明** | © 2014 - 2026 Siemens Schweiz AG |
 
 ### 适用硬件平台
 
@@ -590,7 +594,7 @@ python -m translate \
 <div align="center">
 
 ```
-© 2014 - 2025 Siemens Schweiz AG
+© 2014 - 2026 Siemens Schweiz AG
 All Rights Reserved.
 ```
 

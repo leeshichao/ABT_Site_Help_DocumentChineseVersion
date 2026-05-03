@@ -105,35 +105,8 @@ class TranslationOrchestrator:
         # 进度统计
         self.progress = TranslationProgress()
         
-        # 日志配置
-        self.logger = self._setup_logging()
-
-    def _setup_logging(self) -> logging.Logger:
-        """配置日志系统"""
-        log_dir = self.output_dir.parent / 'logs'
-        log_dir.mkdir(exist_ok=True)
-        
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        log_file = log_dir / f'translation_{timestamp}.log'
-        
-        logger = logging.getLogger('TranslationOrchestrator')
-        logger.setLevel(logging.DEBUG)
-        
-        # 文件处理器
-        fh = logging.FileHandler(log_file, encoding='utf-8')
-        fh.setLevel(logging.DEBUG)
-        fh.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-        
-        # 控制台处理器
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.INFO)
-        ch.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-        
-        logger.addHandler(fh)
-        logger.addHandler(ch)
-        
-        self.log_file = log_file
-        return logger
+        # 日志配置 (使用全局日志)
+        self.logger = logging.getLogger(__name__)
 
     def scan_directory(self, pattern: str = '*.html') -> int:
         """
@@ -357,13 +330,25 @@ class TranslationOrchestrator:
         
         if not pending_tasks:
             self.logger.info("🎉 所有文件已翻译完成！")
-            return self._generate_report()
+            report = self._generate_report()
+            self._print_report(report)
+            return report
         
         if dry_run:
-            self.logger.info(f"🔍 Dry Run 模式 | 将处理 {len(pending_tasks)} 个文件")
-            for task in pending_tasks[:10]:
-                print(f"  📄 {task.input_path.name} ({task.file_size/1024:.1f}KB)")
-            return {'dry_run': True, 'files_count': len(pending_tasks)}
+            self.logger.info(f"🔍 Dry Run 模式 | 计划处理 {len(pending_tasks)} 个文件")
+            for task in pending_tasks:
+                self.logger.info(f"  [DRY RUN] 计划翻译: {task.input_path.name} ({task.file_size/1024:.1f}KB)")
+            
+            # 在 dry_run 模式下，生成、修改并打印模拟报告，然后返回
+            self.progress.end_time = time.time()
+            report = self._generate_report()
+            report['summary']['completed'] = len(pending_tasks)
+            report['summary']['failed'] = 0
+            report['summary']['skipped'] = 0
+            report['summary']['success_rate'] = 100.0
+            report['status'] = 'dry_run_completed'
+            self._print_report(report)
+            return report
         
         # 4. 创建输出目录
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -377,7 +362,6 @@ class TranslationOrchestrator:
         print(f"📊 总文件数: {self.progress.total_files}")
         print(f"⏳ 待处理数: {len(pending_tasks)}")
         print(f"🔧 并发线程: {self.max_workers}")
-        print(f"📝 日志文件: {self.log_file}")
         print("="*70 + "\n")
         
         # 6. 使用线程池并发执行
@@ -421,7 +405,10 @@ class TranslationOrchestrator:
             for task in failed_tasks:
                 self.logger.error(f"  - {task.input_path.name}: {task.error_message}")
         
-        return self._generate_report()
+        # 生成并打印最终报告
+        report = self._generate_report()
+        self._print_report(report)
+        return report
 
     def _generate_report(self) -> Dict:
         """生成最终报告"""
@@ -504,7 +491,6 @@ class TranslationOrchestrator:
         
         print(f"\n📂 输出位置: {self.output_dir.absolute()}")
         print(f"📋 进度文件: {self.progress_file.absolute()}")
-        print(f"📋 日志文件: {self.log_file}")
         print("="*70 + "\n")
 
 

@@ -379,7 +379,14 @@ class YoudaoTranslationBackend(TranslationBackend):
                     translations = result['translateResult']
                     if translations and len(translations) > 0:
                         lines = translations[0]
-                        return ''.join([t['tgt'] for t in lines])
+                        if isinstance(lines, list):
+                            return ''.join([t.get('tgt', '') if isinstance(t, dict) else str(t) for t in lines])
+                        else:
+                            # 如果 lines 不是列表，直接返回
+                            return str(lines)
+                elif result.get('errorCode') != 0:
+                    logging.warning(f"有道翻译API错误: errorCode={result.get('errorCode')}")
+                    return text
             
             logging.warning(f"有道翻译响应异常: {response.status_code} | {response.text}")
             return text
@@ -553,9 +560,25 @@ class TranslatorEngine:
         """
         return self.translator.translate_text(text, protect_vars)
 
+    def translate_segments(self, segments: list) -> list:
+        """
+        批量翻译文本片段（带进度条）
+        
+        Args:
+            segments: 待翻译的文本片段列表
+            
+        Returns:
+            list: 翻译后的文本片段列表
+        """
+        return self.translator.translate_segments(segments)
+
     def get_statistics(self) -> dict:
         """获取翻译统计信息"""
-        return self.translator.stats
+        # 返回完整统计信息，包括术语表规模统计。
+        stats = dict(self.translator.stats)
+        stats['glossary_size'] = len(self.translator.glossary)
+        stats['glossary_exact_size'] = len(self.translator.glossary_exact)
+        return stats
 
     def __getattr__(self, name: str) -> Any:
         """
@@ -842,6 +865,27 @@ class Translator:
         self.cache[text] = final_translation
         
         return final_translation
+
+    def translate_segments(self, segments: list) -> list[str]:
+        """
+        批量翻译文本片段列表
+        
+        Args:
+            segments: 待翻译的文本片段列表，可以是字符串列表或(NavigableString, str)元组列表
+            
+        Returns:
+            list[str]: 翻译后的文本片段列表
+        """
+        translations = []
+        for segment in segments:
+            if isinstance(segment, tuple):
+                # 处理 (NavigableString, str) 元组
+                _, text = segment
+            else:
+                # 处理纯字符串
+                text = segment
+            translations.append(self.translate_text(text))
+        return translations
 
     def save_cache(self, cache_path: Path):
         """保存缓存到JSON文件"""

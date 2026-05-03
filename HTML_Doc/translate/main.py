@@ -297,7 +297,7 @@ def parse_arguments():
                        help='禁用断点续译（从头开始）')
     parser.add_argument('--force', '-f', action='store_true',
                        help='强制重新翻译：清除进度记录和旧输出，从头开始')
-    parser.add_argument('--simple-mode', action='store_true', default=True,
+    parser.add_argument('--simple-mode', action='store_true', default=False,
                        help='使用简单模式（一键启动）')
     
     # 日志参数

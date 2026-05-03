@@ -25,16 +25,16 @@ python -m translate --dry-run --limit 5
 
 ### 3. 翻译前5个文件测试
 ```bash
-# 有道翻译（推荐，默认选项）
-python -m translate --limit 5 --no-banner
-
-# MyMemory翻译（备用）
+# MyMemory翻译（推荐，默认选项）
 python -m translate --limit 5 --no-banner --backend mymemory
+
+# 有道翻译（备用）
+python -m translate --limit 5 --no-banner
 ```
 
 ### 4. 完整翻译（建议夜间运行）
 ```bash
-python -m translate --workers 4 --no-banner
+python -m translate --workers 4 --no-banner --backend mymemory
 ```
 
 ---
@@ -43,8 +43,8 @@ python -m translate --workers 4 --no-banner
 
 | 后端 | 命令 | 中国大陆 | 速度 | 推荐度 |
 |------|------|---------|------|--------|
-| **有道翻译** | `--backend youdao` | ✅ 可用 | 快 | ⭐⭐⭐⭐⭐ |
-| MyMemory | `--backend mymemory` | ✅ 可用 | 慢 | ⭐⭐⭐ |
+| **MyMemory** | `--backend mymemory` | ✅ 可用 | 中等 | ⭐⭐⭐⭐⭐ |
+| 有道翻译 | `--backend youdao` | ⚠️ 不稳定 | 快 | ⭐⭐⭐ |
 | Google | `--backend google` | ❌ 需代理 | 快 | ⭐⭐⭐⭐ |
 | DeepL | `--backend deepl-free` | ❌ 需代理 | 快 | ⭐⭐⭐⭐⭐ |
 
@@ -54,7 +54,7 @@ python -m translate --workers 4 --no-banner
 
 - 📊 **总文件数**: 2,274 个 HTML
 - 📦 **总大小**: 31.85 MB
-- 📝 **术语表**: 237 条（HVAC/BACnet/Siemens）
+- 📝 **术语表**: 2520 条（HVAC/BACnet/Siemens）
 
 ---
 
