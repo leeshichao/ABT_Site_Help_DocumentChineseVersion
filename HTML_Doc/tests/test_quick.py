@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 """快速测试脚本"""
 
+import io
 import sys
 import os
+import typing
 from pathlib import Path
 
 # 确保路径正确 - 指向 HTML_Doc/ (tests 的父目录，包含 translate 模块)
@@ -11,10 +13,12 @@ _BASE_DIR = Path(__file__).resolve().parent.parent  # tests -> HTML_Doc
 sys.path.insert(0, str(_BASE_DIR))
 os.chdir(str(_BASE_DIR))
 
-# 修复Windows编码
+# 修复Windows编码 (sys.stdout 运行时为 TextIOWrapper，静态类型需 cast)
 if sys.platform == 'win32':
-    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
-    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    _stdout: io.TextIOWrapper = typing.cast(io.TextIOWrapper, sys.stdout)
+    _stdout.reconfigure(encoding='utf-8', errors='replace')
+    _stderr: io.TextIOWrapper = typing.cast(io.TextIOWrapper, sys.stderr)
+    _stderr.reconfigure(encoding='utf-8', errors='replace')
 
 print("=== 测试1: 导入模块 ===")
 try:

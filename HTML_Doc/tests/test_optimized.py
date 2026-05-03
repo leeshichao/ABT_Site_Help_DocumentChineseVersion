@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 """测试优化后的翻译引擎"""
+import io
 import sys
 import os
 
@@ -8,23 +11,31 @@ _BASE_DIR = Path(__file__).resolve().parent.parent  # tests -> HTML_Doc
 sys.path.insert(0, str(_BASE_DIR))
 os.chdir(str(_BASE_DIR))
 
-# Windows编码修复
-sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+# Windows编码修复 (sys.stdout 运行时为 TextIOWrapper，静态类型需 cast)
+import typing
+
+_stdout: io.TextIOWrapper = typing.cast(io.TextIOWrapper, sys.stdout)
+_stdout.reconfigure(encoding='utf-8', errors='replace')
 
 # 导入模块（从 translate 包）
-from translate.translator_engine import TranslatorEngine
+from translate.translator_engine import TranslatorEngine, TranslationBackend  # noqa: E402  # pyright: ignore[reportImplicitRelativeImport]
 
 print('=' * 60)
 print('优化后的翻译引擎测试')
 print('=' * 60)
 
 
-class MockBackend:
+
+class MockBackend(TranslationBackend):
     """模拟后端（不实际调用API）"""
-    def translate(self, text, **kw):
+
+    @typing.override
+    def translate(self, text: str, source_lang: str = 'en', target_lang: str = 'zh-CN') -> str:
         return f'[API:{text}]'
 
-    def translate_batch(self, texts, **kw):
+    @typing.override
+    def translate_batch(self, texts: list[str], source_lang: str = 'en',
+                        target_lang: str = 'zh-CN') -> list[str]:
         return [self.translate(t) for t in texts]
 
 

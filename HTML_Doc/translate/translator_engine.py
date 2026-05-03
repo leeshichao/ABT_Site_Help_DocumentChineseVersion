@@ -18,31 +18,89 @@ import re
 import time
 import hashlib
 import logging
-from typing import Dict, List, Optional, Tuple
+from typing import Any
 from pathlib import Path
 from abc import ABC, abstractmethod
 
-# 尝试导入第三方库
+# ==================== 可选依赖的兜底类型定义 ====================
+class GoogleTranslator:  # noqa: E704
+    """GoogleTranslator 兜底实现"""
+    session: object = None
+    source: str = ''
+    target: str = ''
+    def __init__(self, *a: object, **kw: object) -> None: ...
+    def translate(self, text: str = '', **kwargs: object) -> str: return text
+
+class DeeplTranslator:  # noqa: E704
+    """DeeplTranslator 兜底实现"""
+    session: object = None
+    source: str = ''
+    target: str = ''
+    def __init__(self, *a: object, **kw: object) -> None: ...
+    def translate(self, text: str = '', **kwargs: object) -> str: return text
+
+class RequestsConnectionError(Exception): pass  # noqa: E701, E704
+class Timeout(Exception): pass  # noqa: E701, E704
+class SSLError(Exception): pass  # noqa: E701, E704
+class ProxyError(Exception): pass  # noqa: E701, E704
+class ChunkedEncodingError(Exception): pass  # noqa: E701, E704
+
+class _Response:  # noqa: E704
+    status_code: int = 0
+    text: str = ''
+    content: bytes = b''
+    def json(self, **kwargs: object) -> Any: return {}
+
+class _Session:  # noqa: E704
+    proxies: dict[str, str] = {}
+    verify: bool | str = True
+    headers: dict[str, str] = {}
+    def get(self, *a: object, **kwargs: object) -> '_Response': return _Response()
+    def post(self, *a: object, **kwargs: object) -> '_Response': return _Response()
+
+class requests:  # noqa: E001, E704
+    Session: type[_Session] = _Session
+    @staticmethod
+    def get(url: object, **kwargs: object) -> '_Response': return _Response()
+    @staticmethod
+    def post(url: object, **kwargs: object) -> '_Response': return _Response()
+
+# ==================== 尝试导入真实依赖 ====================
+_deep_translator_ok: bool = False
 try:
-    from deep_translator import GoogleTranslator, DeeplTranslator
-    DEEP_TRANSLATOR_AVAILABLE = True
+    from deep_translator import GoogleTranslator as _RealGoogleTranslator  # type: ignore[misc]  # noqa: F401
+    from deep_translator import DeeplTranslator as _RealDeeplTranslator  # type: ignore[misc]  # noqa: F401
+    globals()['GoogleTranslator'] = _RealGoogleTranslator
+    globals()['DeeplTranslator'] = _RealDeeplTranslator
+    _deep_translator_ok = True
 except ImportError:
-    DEEP_TRANSLATOR_AVAILABLE = False
     print("⚠️  deep-translator 未安装，请运行: pip install deep-translator")
+
+DEEP_TRANSLATOR_AVAILABLE: bool = _deep_translator_ok
 
 import os
 
+_requests_ok: bool = False
 try:
-    import requests
-    from requests.exceptions import (
-        ConnectionError as RequestsConnectionError,
-        Timeout, SSLError, ProxyError,
-        ChunkedEncodingError
+    import requests as _real_requests  # type: ignore[no-redef]
+    from requests.exceptions import (  # type: ignore[import-not-found]
+        ConnectionError,
+        Timeout as _RealTimeout,
+        SSLError as _RealSSLError,
+        ProxyError as _RealProxyError,
+        ChunkedEncodingError as _RealChunkedEncodingError,
     )
-    REQUESTS_AVAILABLE = True
+    globals()['requests'] = _real_requests
+    globals()['RequestsConnectionError'] = ConnectionError
+    globals()['Timeout'] = _RealTimeout
+    globals()['SSLError'] = _RealSSLError
+    globals()['ProxyError'] = _RealProxyError
+    globals()['ChunkedEncodingError'] = _RealChunkedEncodingError
+    _requests_ok = True
 except ImportError:
-    REQUESTS_AVAILABLE = False
+    pass
 
+REQUESTS_AVAILABLE: bool = _requests_ok
 
 # ==================== 可重试异常分类 ====================
 
@@ -57,9 +115,10 @@ RETRYABLE_EXCEPTIONS = (
 # 可重试的HTTP状态码
 RETRYABLE_HTTP_CODES = {502, 503, 504}  # Bad Gateway / Service Unavailable / Gateway Timeout
 
-
 class TranslationBackend(ABC):
     """翻译后端抽象基类"""
+
+    consecutive_failures: int = 0
 
     @abstractmethod
     def translate(self, text: str, source_lang: str = 'en', target_lang: str = 'zh-CN') -> str:
@@ -67,11 +126,10 @@ class TranslationBackend(ABC):
         pass
 
     @abstractmethod
-    def translate_batch(self, texts: List[str], source_lang: str = 'en', 
-                       target_lang: str = 'zh-CN') -> List[str]:
+    def translate_batch(self, texts: list[str], source_lang: str = 'en', 
+                       target_lang: str = 'zh-CN') -> list[str]:
         """批量翻译"""
         pass
-
 
 class GoogleTranslationBackend(TranslationBackend):
     """
@@ -84,9 +142,9 @@ class GoogleTranslationBackend(TranslationBackend):
     - 连续失败计数器
     """
 
-    def __init__(self, proxies: Optional[Dict[str, str]] = None, 
+    def __init__(self, proxies: dict[str, str] | None = None, 
                  max_retries: int = 3,
-                 retry_delays: Tuple[int, ...] = (2, 4, 8)):
+                 retry_delays: tuple[int, ...] = (2, 4, 8)):
         """
         Args:
             proxies: 代理配置 {'http': '...', 'https': '...'}
@@ -122,7 +180,7 @@ class GoogleTranslationBackend(TranslationBackend):
             except Exception as e:
                 logging.warning(f"⚠️ 注入代理session失败: {e}，将使用环境变量代理")
 
-    def _resolve_proxies(self, proxies: Optional[Dict[str, str]]) -> Optional[Dict[str, str]]:
+    def _resolve_proxies(self, proxies: dict[str, str] | None) -> dict[str, str] | None:
         """解析代理配置：优先使用传入值，其次读取环境变量"""
         if proxies:
             return proxies
@@ -146,8 +204,6 @@ class GoogleTranslationBackend(TranslationBackend):
         - 指数退避：第1次等2s，第2次等4s，第3次等8s
         - 非网络错误（如"No translation found"）不重试，直接返回原文
         """
-        last_error = None
-        
         for attempt in range(self.max_retries):
             try:
                 # 设置语言
@@ -161,13 +217,13 @@ class GoogleTranslationBackend(TranslationBackend):
                 return result
                 
             except RETRYABLE_EXCEPTIONS as e:
-                last_error = e
+                _ = e
                 self.consecutive_failures += 1
                 
                 if attempt < self.max_retries - 1:
                     delay = self.retry_delays[attempt] if attempt < len(self.retry_delays) else 8
                     logging.warning(
-                        f"⏳ Google翻译网络错误 (第{attempt+1}/{self.max_retries}次) "
+                        f"⏳ Google翻译网络错误 (第{attempt+1}/{self.max_retries}次) "  +
                         f"| {type(e).__name__}: {str(e)[:80]} | 等待{delay}s重试..."
                     )
                     time.sleep(delay)
@@ -182,13 +238,13 @@ class GoogleTranslationBackend(TranslationBackend):
                             pass
                 else:
                     logging.error(
-                        f"❌ Google翻译重试耗尽 ({self.max_retries}次) | "
+                        f"❌ Google翻译重试耗尽 ({self.max_retries}次) | "  +
                         f"最后错误: {type(e).__name__}: {str(e)[:100]}"
                     )
             
             except Exception as e:
                 # 不可重试异常（如 "No translation was found"、参数错误等）
-                last_error = e
+                _ = e
                 self.consecutive_failures += 1
                 logging.error(f"Google翻译失败(非重试): {text[:40]}... | {type(e).__name__}: {str(e)[:100]}")
                 break  # 不重试
@@ -197,8 +253,8 @@ class GoogleTranslationBackend(TranslationBackend):
         logging.error(f"Google翻译最终失败，返回原文: {text[:50]}...")
         return text
 
-    def translate_batch(self, texts: List[str], source_lang: str = 'en', 
-                       target_lang: str = 'zh-CN') -> List[str]:
+    def translate_batch(self, texts: list[str], source_lang: str = 'en', 
+                       target_lang: str = 'zh-CN') -> list[str]:
         results = []
         for text in texts:
             try:
@@ -210,11 +266,10 @@ class GoogleTranslationBackend(TranslationBackend):
                 results.append(text)
         return results
 
-
 class DeepLTranslationBackend(TranslationBackend):
     """DeepL API 后端 (高质量)"""
 
-    def __init__(self, api_key: Optional[str] = None, use_free: bool = False):
+    def __init__(self, api_key: str | None = None, use_free: bool = False):
         """
         Args:
             api_key: DeepL API密钥（如果为None则使用免费版）
@@ -246,15 +301,14 @@ class DeepLTranslationBackend(TranslationBackend):
                     pass
             return text
 
-    def translate_batch(self, texts: List[str], source_lang: str = 'en', 
-                       target_lang: str = 'zh-CN') -> List[str]:
+    def translate_batch(self, texts: list[str], source_lang: str = 'en', 
+                       target_lang: str = 'zh-CN') -> list[str]:
         results = []
         for text in texts:
             translated = self.translate(text, source_lang, target_lang)
             results.append(translated)
             time.sleep(0.5)  # DeepL有较严格的速率限制
         return results
-
 
 # ==================== 有道翻译后端（国内可用）====================
 
@@ -332,15 +386,14 @@ class YoudaoTranslationBackend(TranslationBackend):
         sign_str = f"client={client}&mysticTime={ts}&product=fanyideskweb&key={secret}"
         return hashlib.md5(sign_str.encode()).hexdigest()
     
-    def translate_batch(self, texts: List[str], source_lang: str = 'en', 
-                       target_lang: str = 'zh-CN') -> List[str]:
+    def translate_batch(self, texts: list[str], source_lang: str = 'en', 
+                       target_lang: str = 'zh-CN') -> list[str]:
         results = []
         for text in texts:
             translated = self.translate(text, source_lang, target_lang)
             results.append(translated)
             time.sleep(0.5)  # 有道有请求频率限制
         return results
-
 
 # ==================== MyMemory免费翻译后端 ======================
 
@@ -385,15 +438,14 @@ class MyMemoryTranslationBackend(TranslationBackend):
             logging.error(f"MyMemory翻译失败: {text[:30]}... | 错误: {str(e)}")
             return text
     
-    def translate_batch(self, texts: List[str], source_lang: str = 'en', 
-                       target_lang: str = 'zh-CN') -> List[str]:
+    def translate_batch(self, texts: list[str], source_lang: str = 'en', 
+                       target_lang: str = 'zh-CN') -> list[str]:
         results = []
         for text in texts:
             translated = self.translate(text, source_lang, target_lang)
             results.append(translated)
             time.sleep(1)  # MyMemory有严格速率限制
         return results
-
 
 # ==================== 百度翻译后端（国内可用）====================
 
@@ -406,7 +458,7 @@ class BaiduTranslationBackend(TranslationBackend):
     2. API密钥：注册百度翻译开放平台获取
     """
 
-    def __init__(self, app_id: Optional[str] = None, app_secret: Optional[str] = None):
+    def __init__(self, app_id: str | None = None, app_secret: str | None = None):
         self.app_id = app_id
         self.app_secret = app_secret
         self.use_free = not (app_id and app_secret)
@@ -417,7 +469,7 @@ class BaiduTranslationBackend(TranslationBackend):
         if self.use_free:
             logging.info("百度翻译: 使用API模式（需要app_id和app_secret）")
         else:
-            logging.info(f"百度翻译: 使用API模式 (AppID: {app_id[:8]}...)")
+            logging.info(f"百度翻译: 使用API模式 (AppID: {(app_id or '')[:8]}...)")
     
     def _get_md5(self, text: str) -> str:
         """计算MD5哈希"""
@@ -440,7 +492,7 @@ class BaiduTranslationBackend(TranslationBackend):
     def _translate_api(self, text: str, source_lang: str, target_lang: str) -> str:
         """使用百度翻译API"""
         import random
-        import urllib.parse
+        # urllib.parse 已不需要 (requests.get params 自动编码)
         
         salt = str(random.randint(32768, 65536))
         sign_str = f"{self.app_id}{text}{salt}{self.app_secret}"
@@ -472,15 +524,14 @@ class BaiduTranslationBackend(TranslationBackend):
             logging.error(f"百度API翻译失败: {str(e)}")
             return text
     
-    def translate_batch(self, texts: List[str], source_lang: str = 'en', 
-                       target_lang: str = 'zh-CN') -> List[str]:
+    def translate_batch(self, texts: list[str], source_lang: str = 'en', 
+                       target_lang: str = 'zh-CN') -> list[str]:
         results = []
         for text in texts:
             translated = self.translate(text, source_lang, target_lang)
             results.append(translated)
             time.sleep(0.3)
         return results
-
 
 # ==================== 核心翻译引擎（优化版）====================
 
@@ -583,7 +634,7 @@ class TranslatorEngine:
         'Success', 'Failure', 'Pending', 'Running', 'Completed',
     ]
 
-    def __init__(self, backend: TranslationBackend, glossary_path: Optional[Path] = None):
+    def __init__(self, backend: TranslationBackend, glossary_path: Path | None = None):
         """
         初始化翻译引擎
         
@@ -592,9 +643,9 @@ class TranslatorEngine:
             glossary_path: 术语表CSV文件路径
         """
         self.backend = backend
-        self.glossary: Dict[str, str] = {}
-        self.glossary_exact: Dict[str, str] = {}  # 大小写敏感精确匹配
-        self.cache: Dict[str, str] = {}
+        self.glossary: dict[str, str] = {}
+        self.glossary_exact: dict[str, str] = {}  # 大小写敏感精确匹配
+        self.cache: dict[str, str] = {}
         self.stats = {
             'total_translations': 0,
             'cache_hits': 0,
@@ -697,7 +748,7 @@ class TranslatorEngine:
                 # 精确版本（保留原始大小写）
                 self.glossary_exact[english] = chinese
 
-    def _protect_variables(self, text: str) -> Tuple[str, Dict[str, str]]:
+    def _protect_variables(self, text: str) -> tuple[str, dict[str, str]]:
         """
         保护文本中不需要翻译的内容
         
@@ -783,14 +834,14 @@ class TranslatorEngine:
         
         return protected_text, placeholders
 
-    def _restore_variables(self, text: str, placeholders: Dict[str, str]) -> str:
+    def _restore_variables(self, text: str, placeholders: dict[str, str]) -> str:
         """恢复被保护的变量名"""
         restored = text
         for placeholder, var_name in placeholders.items():
             restored = restored.replace(placeholder, var_name)
         return restored
 
-    def _apply_glossary(self, text: str) -> Tuple[str, int]:
+    def _apply_glossary(self, text: str) -> tuple[str, int]:
         """
         在翻译前应用术语表（预替换已知术语）- 优化版
         
@@ -951,8 +1002,7 @@ class TranslatorEngine:
 
             # 步骤2：应用术语表进行本地翻译（核心优化）
             if self.glossary or self.glossary_exact:
-                processed_text, glossary_matches = self._apply_glossary(processed_text)
-
+                processed_text, _ = self._apply_glossary(processed_text)
             # 检查是否应该跳过API调用（独立于glossary匹配数）
             # 原因：纯变量文本/极短文本/混合文本 即使glossary没匹配也应跳过
             should_skip = self._is_mostly_translated(processed_text)
@@ -1014,7 +1064,7 @@ class TranslatorEngine:
         
         # ===== 降级路径 =====
         logging.warning(
-            f"[FALLBACK] 主后端已连续失败 {_fail_count} 次，"
+            f"[FALLBACK] 主后端已连续失败 {_fail_count} 次，"  +
             f"尝试切换备用后端..."
         )
         
@@ -1036,8 +1086,8 @@ class TranslatorEngine:
             self.stats['api_calls'] += 1
             return text
 
-    def translate_segments(self, segments: List[Tuple[object, str]], 
-                          protect_vars: bool = True) -> Dict[str, str]:
+    def translate_segments(self, segments: list[tuple[object, str]], 
+                          protect_vars: bool = True) -> dict[str, str]:
         """
         批量翻译文本片段列表
         
@@ -1073,7 +1123,7 @@ class TranslatorEngine:
         """清空翻译缓存"""
         self.cache.clear()
 
-    def get_statistics(self) -> Dict:
+    def get_statistics(self) -> dict[str, object]:
         """获取翻译统计信息（增强版）"""
         return {
             **self.stats,
@@ -1090,16 +1140,15 @@ class TranslatorEngine:
             )
         }
 
-
 # ==================== 工厂函数 ====================
 
 def create_translator(backend_type: str = 'youdao', 
-                      api_key: Optional[str] = None,
-                      glossary_path: Optional[Path] = None,
+                      api_key: str | None = None,
+                      glossary_path: Path | None = None,
                       use_free_api: bool = True,
-                      baidu_app_id: Optional[str] = None,
-                      baidu_app_secret: Optional[str] = None,
-                      proxies: Optional[Dict[str, str]] = None) -> TranslatorEngine:
+                      baidu_app_id: str | None = None,
+                      baidu_app_secret: str | None = None,
+                      proxies: dict[str, str] | None = None) -> TranslatorEngine:
     """
     工厂函数：创建翻译引擎实例
     
@@ -1140,7 +1189,6 @@ def create_translator(backend_type: str = 'youdao',
     logging.info(f"✅ 已创建翻译引擎 | 后端: {backend_type} | 术语表: {'已加载' if glossary_path else '无'}")
     
     return engine
-
 
 def test_translator():
     """测试翻译引擎"""
@@ -1197,7 +1245,6 @@ def test_translator():
         print("   请运行: pip install deep-translator")
     except Exception as e:
         print(f"❌ 测试失败: {e}")
-
 
 if __name__ == '__main__':
     # 配置日志
