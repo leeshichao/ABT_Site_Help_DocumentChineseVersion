@@ -126,7 +126,7 @@ backend = 'youdao'
 **Google翻译（需代理）**
 ```bash
 # 使用代理访问
-python -m translate --backend google --proxy http://127.0.0.1:7890
+python -m translate --backend google --proxy http://127.0.0.1:7897
 ```
 
 **DeepL翻译（高质量）**
@@ -308,14 +308,14 @@ python -m translate \
   --backend google \
   --input-dir ./website/en \
   --output-dir ./website/es \
-  --proxy http://127.0.0.1:7890
+  --proxy http://127.0.0.1:7897
 
 # 翻译成法语
 python -m translate \
   --backend google \
   --input-dir ./website/en \
   --output-dir ./website/fr \
-  --proxy http://127.0.0.1:7890
+  --proxy http://127.0.0.1:7897
 ```
 
 ### 示例3：技术手册翻译
@@ -342,11 +342,11 @@ python -m translate --backend deepl --workers 4
 **解决方案**:
 ```bash
 # 设置代理
-export HTTP_PROXY=http://127.0.0.1:7890
-export HTTPS_PROXY=http://127.0.0.1:7890
+export HTTP_PROXY=http://127.0.0.1:7897
+export HTTPS_PROXY=http://127.0.0.1:7897
 
 # 或使用参数
-python -m translate --backend google --proxy http://127.0.0.1:7890
+python -m translate --backend google --proxy http://127.0.0.1:7897
 ```
 
 ### 问题2：翻译质量不理想

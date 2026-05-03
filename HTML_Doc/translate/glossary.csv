@@ -1,0 +1,2521 @@
+English,Chinese,Category,Notes
+
+
+# HVAC 核心词汇
+HVAC,HVAC（暖通空调）,Domain,领域缩写
+Supply air,送风,HVAC,气流方向
+Return air,回风,HVAC,气流方向
+Exhaust air,排风,HVAC,气流方向
+Outdoor air,新风/HVAC,空气来源
+VAV (Variable Air Volume),变风量（VAV）,HVAC,核心概念
+VAV box,VAV箱,HVAC,设备
+Supply air VAV,送风VAV,HVAC,设备类型
+Terminal,末端设备,HVAC,通用术语
+Supply terminal,送风末端,HVAC,设备
+Air damper,风阀,HVAC,执行器
+Damper position,风阀开度,HVAC,参数
+Airflow,气流/风量,HVAC,物理量
+Air volume flow,空气体积流量,HVAC,物理量
+Nominal flow,额定流量,HVAC,参数
+Maximum airflow,最大风量,HVAC,参数
+Minimum airflow,最小风量,HVAC,参数
+Airflow setpoint,风量设定值,HVAC,参数
+Airflow demand,风量需求,HVAC,信号
+Airflow status,风量状态,HVAC,状态
+Relative airflow,相对风量,HVAC,计算值
+Cooling,制冷,HVAC,模式
+Heating,制热/HVAC,模式
+Ventilation,通风,HVAC,模式
+Make-up,补风,HVAC,模式
+Constant Volume (CV),定流量（CV）,HVAC,模式
+Variable Air Volume (VAV),变风量（VAV）,HVAC,模式
+Fume hood,通风柜/排风罩,HVAC,特殊设备
+Coil,盘管/换热器,HVAC,热交换组件
+Cooling coil,制冷盘管,HVAC,设备
+Heating coil,制热盘管,HVAC,设备
+Reheat coil,再热盘管,HVAC,设备
+Chilled beam,冷梁,HVAC,末端设备
+AHU (Air Handling Unit),空气处理机组（AHU）,HVAC,核心设备
+Central AHU,中央空调机组,HVAC,设备
+Air handling unit,空气处理单元,HVAC,设备
+Supply chain,送风链路/HVAC,系统概念
+Fan,风机/HVAC,设备
+Fan speed,风机转速,HVAC,参数
+Static pressure,静压/HVAC,物理量
+Static pressure reset,静压重置/HVAC,控制策略
+Duct,风管/HVAC,管道
+Supply duct,送风管,HVAC,管道
+Duct system,风管系统/HVAC,系统
+Airflow resistance,气流阻力/HVAC,物理量
+Pressure sensor,压力传感器,HVAC,传感器
+Differential pressure sensor,差压传感器,HVAC,传感器
+Flow sensor,流量传感器,HVAC,传感器
+Actuator,执行器/HVAC,设备
+Controller,控制器/HVAC,设备
+External controller,外部控制器/HVAC,设备
+Device mode,设备模式/HVAC,状态
+Control mode,控制模式/HVAC,模式
+Off,关闭/停机,Mode,通用状态
+On,开启/运行,Mode,通用状态
+Available,可用,Status,状态
+Availability,可用性,Status,属性
+Demand,需求,Signal,信号类型
+Request,请求,Signal,信号类型
+Command,命令,Signal,信号类型
+Setpoint,设定值,Parameter,参数类型
+Default value,默认值,Parameter,属性
+Configuration,配置,General,操作
+Configure,配置,Operation,操作
+Parameter,参数,General,通用
+Property,属性,General,对象属性
+Object,对象,BACnet,数据结构
+Value,值,Data,数据
+Present value,当前值,BACnet,属性名
+Scaling value,标定值/缩放值,Parameter,参数
+Normalized,标准化的,Math,数学描述
+Percent,百分比,Unit,单位
+
+
+# ==================== HVAC 设备类 ====================
+Active chilled beam,主动冷梁,HVAC,HVAC末端设备
+Chilled water cooling coil,冷冻水冷却盘管,HVAC,换热设备
+Control valve,控制阀,HVAC,执行设备
+Modulating water valve,调节水阀,HVAC,执行设备
+Modulating valve,调节阀,HVAC,执行设备
+Heat pump,热泵,HVAC,冷热源设备
+Fan coil unit,风机盘管机组,HVAC,末端设备
+Fan coil,风机盘管,HVAC,末端设备
+Radiant ceiling,辐射吊顶,HVAC,辐射末端
+Radiant panel,辐射板,HVAC,辐射末端
+Radiator,散热器,HVAC,热末端
+Primary chilled water,一次冷冻水,HVAC,冷源系统
+Primary plant,主机/一次设备,HVAC,冷热源
+Secondary circuit,二次回路,HVAC,水系统
+Secondary pump,二次泵,HVAC,水系统设备
+Secondary supply,二次侧供应,HVAC,水系统
+Heat exchanger,换热器,HVAC,热交换设备
+Boiler,锅炉,HVAC,热源设备
+Chiller,冷水机组,HVAC,冷源设备
+Condenser,冷凝器,HVAC,制冷组件
+Evaporator,蒸发器,HVAC,制冷组件
+Refrigerant,制冷剂,HVAC,制冷介质
+Dew point temperature,露点温度,HVAC,物理参数
+Supply chain interface,送风链路接口,HVAC,系统接口
+Return chain interface,回风链路接口,HVAC,系统接口
+Exhaust chain interface,排风链路接口,HVAC,系统接口
+
+
+# ==================== 通风与空调设备(程序块) ====================
+Air filter,空气过滤器,HVAC,设备组件
+Filter detector,过滤器检测器,HVAC,传感器
+Filter operating message,过滤器运行信息,HVAC,功能
+Differential pressure sensor,差压传感器,HVAC,传感器
+Maintenance indication,维护指示,HVAC,状态
+Energy recovery,能量回收,HVAC,功能
+Rotary heat exchanger,转轮热交换器,HVAC,设备
+Plate heat exchanger,板式热交换器,HVAC,设备
+Run-around coil,循环盘管,HVAC,设备
+Mixed air damper,混风风阀,HVAC,设备
+Fire damper,防火阀,HVAC,安全设备
+Fire and smoke extraction,防火排烟,HVAC,安全功能
+Smoke extraction evaluation,排烟评估,HVAC,安全功能
+Chilled water cooling coil,冷冻水冷却盘管,HVAC,设备
+Direct expansion evaporator cooling coil,直接蒸发冷却盘管,HVAC,设备
+Temperature-controlled,温度控制,HVAC,控制方式
+Humidity-controlled,湿度控制,HVAC,控制方式
+Fan speed optimization,风机速度优化,HVAC,节能策略
+Pressure setpoint shift,压力设定值偏移,HVAC,重置策略
+Air volume flow calculation,风量计算,HVAC,功能
+Air volume flow-controlled,风量控制,HVAC,控制模式
+Fan group,风机组,HVAC,设备组
+
+
+# ==================== 热功率与盘管控制 ====================
+Thermal power control,热功率控制,HVAC,控制功能
+BTU compensation,BTU补偿,HVAC,热量补偿
+Dehumidification support,除湿支持,HVAC,功能
+Chilled water valve,冷冻水阀,HVAC,执行器
+Hot water valve,热水阀,HVAC,执行器
+Cascaded supply air temperature control,串级送风温度控制,HVAC,控制方式
+Free cooling,免费供冷,HVAC,运行模式
+Dehumidification available,除湿可用,HVAC,状态
+Cooling coil available,冷却盘管可用,HVAC,状态
+Heating coil available,加热盘管可用,HVAC,状态
+Air flow cooling request,风量制冷请求,HVAC,需求信号
+Air flow dehumidification request,风量除湿请求,HVAC,需求信号
+Air flow heating request,风量制热请求,HVAC,需求信号
+Monitoring for air volume flow state,风量状态监控,HVAC,监控功能
+Warm-up,预热,HVAC,运行模式
+Cool down,冷却,HVAC,运行模式
+Supply air temperature,送风温度,HVAC,温度参数
+Discharge temperature,送风温度,HVAC,别名
+
+
+# ==================== 辐射采暖与制冷 ====================
+Radiator,散热器,HVAC,末端设备
+Radiant ceiling,辐射吊顶,HVAC,末端设备
+Radiant panel,辐射板,HVAC,末端设备
+Radiant cooling,辐射制冷,HVAC,功能
+Radiant heating,辐射采暖,HVAC,功能
+Radiant cooling devices,辐射制冷设备,HVAC,设备类别
+Radiant heating devices,辐射采暖设备,HVAC,设备类别
+Chilled ceiling,冷吊顶,HVAC,末端设备
+Radiant ceiling cooling,吊顶辐射制冷,HVAC,功能
+Radiant ceiling heating,吊顶辐射采暖,HVAC,功能
+Radiator heating,散热器采暖,HVAC,功能
+Radiant device,辐射设备,HVAC,设备类别
+Continuous,连续调节,Control,控制模式
+2-position,两位控制,Control,控制模式
+Sequence,顺序/序列,Control,控制参数
+Heating sequence,制热顺序,HVAC,控制顺序
+Cooling sequence,制冷顺序,HVAC,控制顺序
+Radiator heating sequence,散热器制热顺序,HVAC,控制顺序
+Radiant ceiling heating sequence,吊顶辐射制热顺序,HVAC,控制顺序
+Radiant ceiling cooling sequence,吊顶辐射制冷顺序,HVAC,控制顺序
+Coil heating sequence,盘管制热顺序,HVAC,控制顺序
+Coil cooling sequence,盘管制冷顺序,HVAC,控制顺序
+VAV heating sequence,VAV制热顺序,HVAC,控制顺序
+VAV cooling sequence,VAV制冷顺序,HVAC,控制顺序
+Heat transfer,热传递,HVAC,物理过程
+Heat transfer calculations,热传递计算,HVAC,计算功能
+Supply flow rate,送风流量,HVAC,流量参数
+Flow temperature,送风温度,HVAC,别名
+Supply flow temperature,送风温度,HVAC,温度参数
+
+
+# ==================== 焓湿与空气处理 ====================
+Enthalpy and absolute humidity,焓和绝对湿度,HVAC,计算
+Temperature and relative humidity,温度和相对湿度,HVAC,测量
+Absolute humidity to temperature,绝对湿度转温度,HVAC,转换
+Setpoint field,设定值区域,HVAC,设定值
+Supply air setpoint,送风设定值,HVAC,设定值
+Room temperature setpoint,房间温度设定值,HVAC,设定值
+
+
+# ==================== VAV 与文丘里阀控制 ====================
+Venturi valve,文丘里阀,HVAC,VAV执行器
+Linear characterization curve,线性特性曲线,Control,控制算法
+Linear characterization curve with PID,PID组合特性曲线,Control,控制算法
+Minimum control velocity,最小控制风速,HVAC,控制参数
+Stroke time,执行器行程时间,HVAC,执行器参数
+Characterization table,特性曲线表,Control,数据表
+Calibration curve,校准曲线,HVAC,校准数据
+Open-loop control,开环控制,Control,控制模式
+Closed-loop control,闭环控制,Control,控制模式
+Combined control,组合控制,Control,控制模式
+Curve only,仅特性曲线控制,Control,控制模式
+PID only,仅PID控制,Control,控制模式
+Fail mode,故障模式,Control,控制模式
+Switch-on point,开启点,Control,阈值
+Low air volume flow,低风量模式,Mode,VAV模式
+Network communication loss,网络通信中断,Error,故障状态
+Through-the-wall sensor,穿墙式传感器,Sensor,面风速传感器
+Cascade feedback loop,串级反馈回路,Control,控制回路
+Rate limiting feature,速率限制功能,Control,控制功能
+Filter constant,滤波常数,HVAC,传感器参数
+Correction factor,修正系数,HVAC,修正参数
+Wind up,积分饱和,Control,PID特性
+Raw measured value,原始测量值,Process,数据
+Measured value,测量值,Process,数据
+Manual operation lock,手动操作锁定,Control,锁定功能
+Retain manual setpoint after power failure,断电后保留手动设定值,Control,配置参数
+
+
+# ==================== VAV风量控制与跟踪 ====================
+VAV tracking method,VAV跟踪方法,HVAC,控制参数
+Setpoint tracking,设定值跟踪,HVAC,跟踪方法
+Air volume flow tracking,风量跟踪,HVAC,跟踪方法
+Switch tolerance for tracking method,跟踪方法切换容差,HVAC,控制参数
+Switch delay for tracking method,跟踪方法切换延迟,HVAC,时间参数
+Switch tolerance for air volume flow state,风量状态切换容差,HVAC,控制参数
+Switch delay for air volume flow state,风量状态切换延迟,HVAC,时间参数
+Switch-on point for air volume flow state,风量状态开启点,HVAC,阈值
+Switch-on point for air flow demand,风量需求开启点,HVAC,阈值
+Hysteresis for air flow demand,风量需求滞后,HVAC,控制参数
+Number of supply air VAV boxes,送风VAV箱数量,HVAC,配置参数
+Number of extract air VAV boxes,排风VAV箱数量,HVAC,配置参数
+Number of fume hoods,通风柜数量,HVAC,配置参数
+Flow rate,流量,HVAC,物理量
+Flow rates for supply and extract,送排风流量,HVAC,流量参数
+Flow limits,流量限值,HVAC,限值参数
+Flow range,流量范围,HVAC,参数范围
+Minimum flow limits,最小流量限值,HVAC,限值参数
+Maximum flow limits,最大流量限值,HVAC,限值参数
+Rate limiting feature,速率限制功能,HVAC,控制功能
+Flow coefficient calculation,流量系数计算,HVAC,计算功能
+Airflow coefficient,风量系数,HVAC,校准参数
+Calculated flow coefficient,计算流量系数,HVAC,计算值
+
+
+# ==================== 文丘里阀控制 ====================
+Venturi valve,文丘里阀,HVAC,执行器
+Venturi air valve,文丘里风阀,HVAC,执行器
+Venturi air valve calibration,文丘里风阀校准,HVAC,校准功能
+Linear characterization curve,线性特性曲线,HVAC,控制算法
+Linear characterization curve with PID,PID组合特性曲线,HVAC,控制算法
+Characterization table,特性曲线表,HVAC,数据表
+Characterization curve,特性曲线,HVAC,控制算法
+Open-loop control,开环控制,HVAC,控制模式
+Closed-loop control,闭环控制,HVAC,控制模式
+PID control,PID控制,HVAC,控制算法
+Air volume flow scale,风量比例,HVAC,信号
+Airflow setpoint,风量设定值,HVAC,设定值
+Airflow controller,风量控制器,HVAC,控制器
+Velocity control,速度控制,HVAC,控制方式
+Air velocity,风速,HVAC,物理量
+Effective air velocity,有效风速,HVAC,计算值
+Minimum air velocity for control,最小控制风速,HVAC,控制参数
+Minimum control velocity,最小控制速度,HVAC,控制参数
+Minimum velocity for control and venturi calibration,控制和文丘里校准最小速度,HVAC,控制参数
+Cut out velocity,切除速度,HVAC,控制参数
+Curve only,仅特性曲线控制,HVAC,控制模式
+PID only,仅PID控制,HVAC,控制模式
+Combined control,组合控制,HVAC,控制模式
+Fail mode,故障模式,HVAC,控制模式
+Flow sensor failure,流量传感器故障,HVAC,故障状态
+Air volume flow sensor,风量传感器,HVAC,传感器
+Differential pressure switch-on point,差压开启点,HVAC,阈值
+Hysteresis for differential pressure,差压滞后,HVAC,控制参数
+Switch-on point for differential pressure,差压开启点,HVAC,阈值
+Time constant for air volume flow,风量时间常数,HVAC,滤波参数
+Time constant for relative air volume flow setpoint,相对风量设定值时间常数,HVAC,控制参数
+Stroke time,执行器行程时间,HVAC,执行器参数
+Rate limiting,速率限制,HVAC,控制功能
+
+
+# ==================== VAV设备模式与状态 ====================
+VAV device mode,VAV设备模式,HVAC,状态
+Device mode state,设备模式状态,HVAC,状态
+Maximum air volume flow,最大风量,HVAC,设备模式
+Minimum air volume flow,最小风量,HVAC,设备模式
+Smoke control air volume flow setpoint,排烟控制风量设定值,HVAC,设定值
+Smoke control air volume flow,排烟控制风量,HVAC,功能
+Max.air vol.flow,最大风量,HVAC,缩写
+Min.air vol.flow,最小风量,HVAC,缩写
+Smoke ctrl.air flow setp.,排烟控制风量,HVAC,缩写
+Off,关闭,HVAC,设备模式
+Control mode,控制模式,HVAC,设备模式
+Demand signal,需求信号,HVAC,信号类型
+Demand level,需求等级,HVAC,信号强度
+Flow scale,流量比例,HVAC,信号
+
+
+# ==================== 风量平衡与校准 ====================
+Air balancing,风量平衡,HVAC,调试任务
+Balancing mode,平衡模式,HVAC,调试模式
+Balancing state,平衡状态,HVAC,调试状态
+Balancing command,平衡命令,HVAC,调试命令
+Initial,初始,HVAC,状态
+Balancing,平衡中,HVAC,状态
+Balanced,已平衡,HVAC,状态
+Ready,就绪,HVAC,校准状态
+Calibrate,校准,HVAC,校准动作
+Apply,应用,HVAC,校准动作
+Cancel,取消,HVAC,校准动作
+Failed calibration,校准失败,HVAC,校准状态
+Calibrated,已校准,HVAC,校准状态
+Flow coefficient,流量系数,HVAC,校准参数
+Box coefficient,箱体系数,HVAC,设备参数
+Duct area calculation,风管面积计算,HVAC,计算功能
+Dimension A,尺寸A,HVAC,几何参数
+Dimension B,尺寸B,HVAC,几何参数
+Air volume flow at hood,排风罩处风量,HVAC,测量点
+Flow conversion,流量换算,HVAC,计算功能
+Maximum ventilation,最大通风,HVAC,平衡模式
+Minimum ventilation,最小通风,HVAC,平衡模式
+Maximum exhaust air,最大排风,HVAC,平衡模式
+Minimum exhaust air,最小排风,HVAC,平衡模式
+Manual,手动,HVAC,平衡模式
+AVS calibration,AVS校准,HVAC,传感器校准
+Venturi calibration,文丘里校准,HVAC,执行器校准
+
+
+# ==================== 风量平衡功能 ====================
+Balancing state,平衡状态,HVAC,调试状态
+Balancing mode,平衡模式,HVAC,调试模式
+Balancing command,平衡命令,HVAC,调试命令
+Initial,初始,HVAC,状态
+Balancing,平衡中,HVAC,状态
+Balanced,已平衡,HVAC,状态
+Ready,就绪,HVAC,校准状态
+Calibrate,校准,HVAC,校准动作
+Apply,应用,HVAC,校准动作
+Cancel,取消,HVAC,校准动作
+Failed calibration,校准失败,HVAC,校准状态
+Calibrated,已校准,HVAC,校准状态
+Flow coefficient,流量系数,HVAC,校准参数
+Box coefficient,箱体系数,HVAC,设备参数
+Calculated flow coefficient,计算流量系数,HVAC,计算值
+Initial flow coefficient,初始流量系数,HVAC,参数
+Recorded flow coefficient,记录流量系数,HVAC,参数
+Duct area calculation,风管面积计算,HVAC,计算功能
+Duct area,风管面积,HVAC,几何参数
+Duct shape,风管形状,HVAC,几何参数
+Rectangular,矩形,HVAC,形状
+Round,圆形,HVAC,形状
+Flat oval,扁平椭圆,HVAC,形状
+Direct entry,直接输入,HVAC,输入方式
+Dimension A,尺寸A,HVAC,几何参数
+Dimension B,尺寸B,HVAC,几何参数
+Flow conversion,流量换算,HVAC,计算功能
+Maximum cooling,最大制冷,HVAC,平衡模式
+Maximum heating,最大制热,HVAC,平衡模式
+Maximum ventilation,最大通风,HVAC,平衡模式
+Minimum cooling,最小制冷,HVAC,平衡模式
+Minimum heating,最小制热,HVAC,平衡模式
+Minimum ventilation,最小通风,HVAC,平衡模式
+Smoke,排烟,HVAC,平衡模式
+Air volume flow at hood,排风罩处风量,HVAC,测量值
+Recorded air volume flow at hood,记录排风罩风量,HVAC,记录值
+Recorded position,记录位置,HVAC,记录值
+Recorded balancing mode,记录平衡模式,HVAC,记录值
+Recorded air volume flow,记录风量,HVAC,记录值
+Air balancing,风量平衡,HVAC,调试任务
+Balance report,平衡报告,HVAC,文档
+Airflow balance,风量平衡,HVAC,系统功能
+
+
+# ==================== 送风VAV详细参数 ====================
+Supply air VAV,送风VAV,HVAC,设备
+Supply air VAV position,送风VAV位置,HVAC,执行器输出
+Supply air VAV differential pressure,送风VAV差压,HVAC,传感器
+Supply air VAV effective air velocity,送风VAV有效风速,HVAC,计算值
+Supply air VAV setpoint for air volume flow,送风VAV风量设定值,HVAC,设定值
+Supply air VAV setpoint for relative air volume flow,送风VAV相对风量设定值,HVAC,设定值
+Supply air VAV air volume flow,送风VAV风量,HVAC,测量值
+Supply air VAV relative air volume flow,送风VAV相对风量,HVAC,计算值
+Supply air VAV air volume flow deviation,送风VAV风量偏差,HVAC,计算值
+Supply air VAV air volume flow saturation,送风VAV风量饱和,HVAC,状态
+Supply air VAV air flow controller,送风VAV风量控制器,HVAC,控制器
+Supply air VAV air volume flow request,送风VAV风量请求,HVAC,需求信号
+Supply air VAV air volume flow scale,送风VAV风量比例,HVAC,信号
+Supply air VAV available for cooling,送风VAV可用制冷,HVAC,状态
+Supply air VAV available for heating,送风VAV可用制热,HVAC,状态
+Supply air VAV available for ventilation,送风VAV可用通风,HVAC,状态
+Supply air VAV required for cooling,送风VAV需要制冷,HVAC,需求信号
+Supply air VAV required for heating,送风VAV需要制热,HVAC,需求信号
+Supply air VAV changeover condition,送风VAV切换条件,HVAC,控制信号
+Supply air VAV cooling demand,送风VAV制冷需求,HVAC,需求信号
+Supply air VAV heating demand,送风VAV制热需求,HVAC,需求信号
+Supply air VAV ventilation demand,送风VAV通风需求,HVAC,需求信号
+Supply air VAV air demand for plant mode,送风VAV设备模式空气需求,HVAC,需求信号
+Supply air VAV air volume flow tracking,送风VAV风量跟踪,HVAC,信号
+Supply air VAV balancing state,送风VAV平衡状态,HVAC,状态
+Supply air VAV balancing mode,送风VAV平衡模式,HVAC,模式
+Supply air VAV balancing command,送风VAV平衡命令,HVAC,命令
+Supply air VAV air volume flow at hood,送风VAV排风罩处风量,HVAC,测量值
+Supply air VAV recorded balancing mode,送风VAV记录平衡模式,HVAC,记录值
+Supply air VAV recorded air volume flow at hood,送风VAV记录排风罩风量,HVAC,记录值
+Supply air VAV recorded flow coefficient,送风VAV记录流量系数,HVAC,记录值
+Supply air VAV initial flow coefficient,送风VAV初始流量系数,HVAC,参数
+Supply air VAV recorded air volume flow,送风VAV记录风量,HVAC,记录值
+Supply air VAV recorded position,送风VAV记录位置,HVAC,记录值
+Supply air VAV duct area,送风VAV风管面积,HVAC,几何参数
+Supply air VAV duct shape,送风VAV风管形状,HVAC,几何参数
+Supply air VAV dimension A,送风VAV尺寸A,HVAC,几何参数
+Supply air VAV dimension B,送风VAV尺寸B,HVAC,几何参数
+Supply air VAV flow coefficient,送风VAV流量系数,HVAC,校准参数
+Supply air VAV smoke control air volume flow setpoint,送风VAV排烟控制风量设定值,HVAC,设定值
+Supply air VAV maximum air volume flow for cooling,送风VAV最大制冷风量,HVAC,限值参数
+Supply air VAV minimum air volume flow for cooling,送风VAV最小制冷风量,HVAC,限值参数
+Supply air VAV maximum air volume flow for heating,送风VAV最大制热风量,HVAC,限值参数
+Supply air VAV minimum air volume flow for heating,送风VAV最小制热风量,HVAC,限值参数
+Supply air VAV maximum air volume flow for ventilation,送风VAV最大通风风量,HVAC,限值参数
+Supply air VAV minimum air volume flow for ventilation,送风VAV最小通风风量,HVAC,限值参数
+Supply air VAV supply chain for air,送风VAV送风链路,HVAC,接口
+Supply air venturi valve calibration command,送风文丘里阀校准命令,HVAC,校准命令
+Supply air venturi valve calibration state,送风文丘里阀校准状态,HVAC,校准状态
+Supply air VAV calculated flow coefficient,送风VAV计算流量系数,HVAC,计算值
+
+
+# ==================== 排风VAV详细参数 ====================
+Extract air VAV,排风VAV,HVAC,设备
+Extract air VAV position,排风VAV位置,HVAC,执行器输出
+Extract air VAV differential pressure,排风VAV差压,HVAC,传感器
+Extract air VAV effective air velocity,排风VAV有效风速,HVAC,计算值
+Extract air VAV setpoint for air volume flow,排风VAV风量设定值,HVAC,设定值
+Extract air VAV setpoint for relative air volume flow,排风VAV相对风量设定值,HVAC,设定值
+Extract air VAV air volume flow,排风VAV风量,HVAC,测量值
+Extract air VAV relative air volume flow,排风VAV相对风量,HVAC,计算值
+Extract air VAV air volume flow deviation,排风VAV风量偏差,HVAC,计算值
+Extract air VAV air volume flow saturation,排风VAV风量饱和,HVAC,状态
+Extract air VAV air flow controller,排风VAV风量控制器,HVAC,控制器
+Extract air VAV air volume flow request,排风VAV风量请求,HVAC,需求信号
+Extract air VAV available for ventilation,排风VAV可用通风,HVAC,状态
+Extract air VAV air volume flow tracking,排风VAV风量跟踪,HVAC,信号
+Extract air VAV balancing state,排风VAV平衡状态,HVAC,状态
+Extract air VAV balancing mode,排风VAV平衡模式,HVAC,模式
+Extract air VAV balancing command,排风VAV平衡命令,HVAC,命令
+Extract air VAV air volume flow at hood,排风VAV排风罩处风量,HVAC,测量值
+Extract air VAV recorded balancing mode,排风VAV记录平衡模式,HVAC,记录值
+Extract air VAV recorded air volume flow at hood,排风VAV记录排风罩风量,HVAC,记录值
+Extract air VAV recorded flow coefficient,排风VAV记录流量系数,HVAC,记录值
+Extract air VAV initial flow coefficient,排风VAV初始流量系数,HVAC,参数
+Extract air VAV recorded air volume flow,排风VAV记录风量,HVAC,记录值
+Extract air VAV recorded position,排风VAV记录位置,HVAC,记录值
+Extract air VAV duct area,排风VAV风管面积,HVAC,几何参数
+Extract air VAV duct shape,排风VAV风管形状,HVAC,几何参数
+Extract air VAV dimension A,排风VAV尺寸A,HVAC,几何参数
+Extract air VAV dimension B,排风VAV尺寸B,HVAC,几何参数
+Extract air VAV flow coefficient,排风VAV流量系数,HVAC,校准参数
+Extract air VAV smoke control air volume flow setpoint,排风VAV排烟控制风量设定值,HVAC,设定值
+Extract air VAV maximum air volume flow for ventilation,排风VAV最大通风风量,HVAC,限值参数
+Extract air VAV minimum air volume flow for ventilation,排风VAV最小通风风量,HVAC,限值参数
+Extract air VAV extract chain for air,排风VAV排风链路,HVAC,接口
+Extract air VAV box coefficient,排风VAV箱体系数,HVAC,校准参数
+Extract air VAV calculated flow coefficient,排风VAV计算流量系数,HVAC,计算值
+Extract air VAV air velocity,排风VAV风速,HVAC,测量值
+External flow control,外部流量控制,HVAC,控制方式
+OEM box coefficient,OEM箱体系数,HVAC,参数
+Failure mode for air volume flow sensor,风量传感器故障模式,HVAC,配置参数
+Hold,保持,HVAC,故障模式
+Close,关闭,HVAC,故障模式
+Open,开启,HVAC,故障模式
+Cutout feature,切断功能,HVAC,控制特征
+Settling time,稳定时间,HVAC,性能参数
+Pressure unit,压力单位,HVAC,单位
+Air volume flow unit,风量单位,HVAC,单位
+
+
+# ==================== VAV可用性与需求信号 ====================
+Available for cooling,可用制冷,HVAC,状态信号
+Available for heating,可用制热,HVAC,状态信号
+Available for ventilation,可用通风,HVAC,状态信号
+Required for cooling,需要制冷,HVAC,需求信号
+Required for heating,需要制热,HVAC,需求信号
+Required,需要,HVAC,需求
+Cooling demand,制冷需求,HVAC,需求信号
+Heating demand,制热需求,HVAC,需求信号
+Ventilation demand,通风需求,HVAC,需求信号
+Air demand for plant mode,设备模式空气需求,HVAC,需求信号
+Changeover condition,切换条件,HVAC,控制条件
+Make-up air,补风,HVAC,功能
+Make-up,补风,HVAC,缩写
+Supply chain interface,送风链路接口,HVAC,接口
+Supply chain for air,送风链路,HVAC,接口
+
+
+# ==================== AHU反馈信号 ====================
+AHU fan static pressure reset,AHU风机静压重置,HVAC,控制策略
+Fan static pressure reset,风机静压重置,HVAC,节能策略
+AHU changeover condition,AHU切换条件,HVAC,控制信号
+Saturation signal,饱和信号,HVAC,AHU反馈
+Saturation,饱和,HVAC,状态
+Starved,饥饿,HVAC,饱和状态
+Satisfied,满足,HVAC,饱和状态
+Airflow deviation signal,风量偏差信号,HVAC,AHU反馈
+Air volume flow deviation,风量偏差,HVAC,计算值
+Enable deviation calculation,启用偏差计算,HVAC,配置参数
+Enable saturation calculation,启用饱和计算,HVAC,配置参数
+Saturation level,饱和等级,HVAC,控制参数
+Air volume flow error limit,风量误差限值,HVAC,控制参数
+Switch-on delay saturation,饱和开启延迟,HVAC,时间参数
+AHU static fan pressure reset,AHU静压重置,HVAC,节能策略
+Pressure independence,压力无关,HVAC,特性
+Pressure reset,压力重置,HVAC,控制策略
+
+
+# ==================== 压差与饱和信号 ====================
+Airflow deviation signal,风量偏差信号,HVAC,AHU反馈
+Saturation signal,饱和信号,HVAC,AHU反馈
+Saturation level,饱和等级,HVAC,控制参数
+Saturation,饱和,Control,状态
+Starved,饥饿/不足,Status,饱和状态描述
+Satisfied,满足/充足,Status,饱和状态描述
+Enable saturation calculation,启用饱和计算,HVAC,配置参数
+Airflow error limit,风量误差限值,HVAC,控制参数
+Switch-on delay saturation,饱和开启延迟,HVAC,时间参数
+Rogue zone,异常区域,HVAC,问题区域
+Pressure reset,压力重置,HVAC,控制策略
+Static fan pressure reset,风机静压重置,HVAC,节能策略
+
+
+# ==================== 送排风链路接口 ====================
+Supply air VAV cooling demand,送风VAV制冷需求,HVAC,需求信号
+Supply air VAV heating demand,送风VAV制热需求,HVAC,需求信号
+Supply air VAV ventilation demand,送风VAV通风需求,HVAC,需求信号
+Supply air VAV relief,送风VAV泄放,HVAC,信号
+Extract air VAV relief,排风VAV泄放,HVAC,信号
+Air volume flow relief,风量泄放,HVAC,信号
+Air volume flow provided for ventilation,通风提供风量,HVAC,信号
+Supply chain interface for air,送风链路空气接口,HVAC,接口
+Extract chain interface for air,排风链路空气接口,HVAC,接口
+Exhaust chain interface,排风链路接口,HVAC,接口
+Flow relief,流量泄放,HVAC,信号
+Extraction,抽取,HVAC,动作
+
+
+# ==================== 通风控制与需求控制通风 ====================
+Minimum ventilation,最小通风,HVAC,通风模式
+Ventilation rate,通风率,HVAC,流量参数
+Demand-controlled ventilation,需求控制通风,HVAC,通风策略
+DCV,需求控制通风,HVAC,缩写
+External DCV,外部需求控制通风,HVAC,通风策略
+External demand-controlled ventilation,外部需求控制通风,HVAC,通风策略
+Room ventilation,房间通风,HVAC,功能
+Ventilation air volume flow,通风风量,HVAC,流量参数
+Ventilation air volume flow setpoint,通风风量设定值,HVAC,设定值
+Ventilation alarm,通风报警,HVAC,报警
+Ventilation communication alarm,通风通信报警,HVAC,报警
+Ventilation alarm limit,通风报警限值,HVAC,参数
+Ventilation alarm delay,通风报警延迟,HVAC,时间参数
+Ventilation air change rate,通风换气次数,HVAC,监控参数
+Ventilation velocity rate,通风面风率,HVAC,监控参数
+Air changes per hour,每小时换气次数,HVAC,通风参数
+Air changes per hour (Ach/h),每小时换气次数,HVAC,通风单位
+Airflow per unit floor area,单位面积风量,HVAC,通风参数
+Volume of room,房间体积,HVAC,几何参数
+Area of room,房间面积,HVAC,几何参数
+Unit for minimum room ventilation,房间最小通风单位,HVAC,配置
+Minimum room ventilation for comfort,舒适模式最小房间通风,HVAC,配置参数
+Minimum room ventilation for pre-comfort,预舒适最小房间通风,HVAC,配置参数
+Minimum room ventilation for economy,经济模式最小房间通风,HVAC,配置参数
+Minimum room ventilation for protection,防护模式最小房间通风,HVAC,配置参数
+Minimum room air volume flow for comfort,舒适模式最小房间风量,HVAC,计算值
+Minimum room air volume flow for pre-comfort,预舒适最小房间风量,HVAC,计算值
+Minimum room air volume flow for economy,经济模式最小房间风量,HVAC,计算值
+Minimum room air volume flow for protection,防护模式最小房间风量,HVAC,计算值
+Present ventilation setpoint,当前通风设定值,HVAC,计算值
+Rapid Ventilation,快速通风,HVAC,通风功能
+High flow rate,高流量,HVAC,流量参数
+Signal source DCV setpoint,DCV设定值信号源,HVAC,配置参数
+BACnet object,BACnet对象,HVAC,通信接口
+Physical input,物理输入,HVAC,通信接口
+Replacement value for room ventilation,房间通风替代值,HVAC,配置参数
+Communication alarm delay,通信报警延迟,HVAC,时间参数
+Setpoint room air quality for comfort,舒适模式房间空气质量设定值,HVAC,设定值
+Setpoint room air quality for pre-comfort,预舒适房间空气质量设定值,HVAC,设定值
+Setpoint room air quality for economy,经济模式房间空气质量设定值,HVAC,设定值
+Setpoint room air quality for protection,防护模式房间空气质量设定值,HVAC,设定值
+Room air quality,房间空气质量,HVAC,环境参数
+CO2 concentration,二氧化碳浓度,HVAC,环境参数
+ppm,ppm,HVAC,浓度单位
+Comfort configuration,舒适配置,HVAC,配置
+Pre-Comfort configuration,预舒适配置,HVAC,配置
+Economy configuration,经济配置,HVAC,配置
+Protection configuration,防护配置,HVAC,配置
+Cool down configuration,冷却配置,HVAC,配置
+Configuration,配置,HVAC,设置
+
+
+# ==================== 房间压差与风量跟踪 ====================
+Room pressurization mode,房间压差模式,HVAC,控制模式
+Neutral,中性,HVAC,压差模式
+Positive pressure,正压,HVAC,压差模式
+Negative pressure,负压,HVAC,压差模式
+Transferred air volume flow,传递风量,HVAC,监控参数
+Transfer flow,传递流量,HVAC,流量参数
+Air flow transfer,风量转移,HVAC,监控参数
+Tracking mode,跟踪模式,HVAC,控制策略
+Supply air tracks extract air,送风跟踪排风,HVAC,跟踪模式
+Extract air tracks supply air,排风跟踪送风,HVAC,跟踪模式
+Fume hood flow,通风柜风量,HVAC,监控参数
+Fume hood exhaust,通风柜排风,HVAC,排风类型
+Single tracking pair,单跟踪对,HVAC,配置
+Lab room,实验室,HVAC,功能区域
+Large lab,大型实验室,HVAC,功能区域
+Large lab with fume hoods,带通风柜的大型实验室,HVAC,配置
+Flow monitoring,流量监控,HVAC,监控功能
+Flow rates for supply and extract,送排风流量,HVAC,流量参数
+Additional supply air volume flow,附加送风量,HVAC,配置参数
+Additional extract air volume flow,附加排风量,HVAC,配置参数
+Effective additional supply air volume flow,有效附加送风量,HVAC,计算值
+Effective additional extract air volume flow,有效附加排风量,HVAC,计算值
+
+
+# ==================== 差压串级控制 ====================
+Room differential pressure,房间差压,HVAC,物理量
+Room differential pressure setpoint,房间差压设定值,HVAC,设定值
+Differential pressure cascade,差压串级,HVAC,控制方式
+Differential pressure controller,差压控制器,HVAC,控制器
+Room pressure PID,房间压力PID,HVAC,控制器
+Room pressure control,房间压力控制,HVAC,控制功能
+Pressure control loop,压力控制回路,HVAC,控制回路
+Pressure loop,压力回路,HVAC,控制回路
+Pressure reset,压力重置,HVAC,控制策略
+Minimum transferred air volume flow,最小传递风量,HVAC,限值
+Maximum transferred air volume flow,最大传递风量,HVAC,限值
+Delay for room pressure control after door close,门关闭后压力控制延迟,HVAC,时间参数
+Time constant for room differential pressure,房间差压时间常数,HVAC,滤波参数
+Room pressure alarm,房间压力报警,HVAC,报警
+Room pressure warning,房间压力警告,HVAC,警告
+Door contact,门触点,HVAC,输入信号
+Door open,门打开,HVAC,状态
+
+
+# ==================== 房间热功率控制 ====================
+Room thermal power control,房间热功率控制,HVAC,控制功能
+Thermal power control feature active,热功率控制功能激活,HVAC,功能状态
+Thermal power control feature inactive,热功率控制功能未激活,HVAC,功能状态
+Room temperature feedback,房间温度反馈,HVAC,控制信号
+Supply air terminal,送风末端,HVAC,设备
+Temperature loop,温度回路,HVAC,控制回路
+Temperature cascade control,温度串级控制,HVAC,控制方式
+Feedback controller,反馈控制器,Control,控制器
+Heat flow,热流量,HVAC,物理量
+Discharge temperature setpoint,送风温度设定值,HVAC,参数
+Supply temperature setpoint,送风温度设定值,HVAC,参数
+Maximum supply air temperature setpoint,最大送风温度设定值,HVAC,参数
+Minimum supply air temperature setpoint,最小送风温度设定值,HVAC,参数
+Offset,偏移,Control,修正参数
+Offset for heating coil temperature setpoint,加热盘管温度设定值偏移,HVAC,参数
+Offset for cooling VAV start,制冷VAV开启偏移,HVAC,参数
+Offset for heating VAV start,制热VAV开启偏移,HVAC,参数
+Present cooling setpoint,当前制冷设定值,HVAC,参数
+Present heating setpoint,当前制热设定值,HVAC,参数
+Delta,增量,HVAC,参数
+Delta cooling setpoint for pre-comfort,预舒适制冷设定值增量,HVAC,参数
+Delta heating setpoint for pre-comfort,预舒适制热设定值增量,HVAC,参数
+Comfort cooling configuration,舒适制冷配置,HVAC,配置
+Pre-Comfort cooling configuration,预舒适制冷配置,HVAC,配置
+Economy cooling configuration,经济制冷配置,HVAC,配置
+Protection cooling configuration,防护制冷配置,HVAC,配置
+Cool down configuration,冷却配置,HVAC,配置
+Free cooling configuration,免费供冷配置,HVAC,配置
+Comfort heating configuration,舒适制热配置,HVAC,配置
+Pre-Comfort heating configuration,预舒适制热配置,HVAC,配置
+Economy heating configuration,经济制热配置,HVAC,配置
+Protection heating configuration,防护制热配置,HVAC,配置
+Warm-up configuration,预热配置,HVAC,配置
+Radiant devices,辐射设备,HVAC,设备类别
+Air treatment devices,空气处理设备,HVAC,设备类别
+Radiant & air treatment devices,辐射与空气处理设备,HVAC,配置选项
+Next room operating mode,下一房间运行模式,HVAC,状态
+Draft,气流/冷风感,HVAC,人体舒适感
+
+
+# ==================== 风机盘管与热泵控制 ====================
+Heat pump,热泵,HVAC,设备
+Heat pump room temperature control,热泵房间温度控制,HVAC,控制功能
+Fan coil unit,风机盘管机组,HVAC,末端设备
+Fan coil,风机盘管,HVAC,末端设备
+Radiator,散热器,HVAC,末端设备
+Radiant ceiling,辐射吊顶,HVAC,末端设备
+Radiant panel,辐射板,HVAC,末端设备
+Radiant device,辐射设备,HVAC,设备类别
+Air treatment devices,空气处理设备,HVAC,设备类别
+Radiant devices,辐射设备,HVAC,设备类别
+Radiant & air treatment devices,辐射与空气处理设备,HVAC,配置选项
+Room temperature controller,房间温度控制器,HVAC,控制器
+Room temperature controller cooling,房间温度制冷控制器,HVAC,控制器
+Room temperature controller heating,房间温度制热控制器,HVAC,控制器
+Room temperature controller cooling for fan,风机房间温度制冷控制器,HVAC,控制器
+Room temperature controller cooling for radiant ceiling,辐射吊顶房间温度制冷控制器,HVAC,控制器
+Room temperature controller cooling for heating/cooling coil,冷热盘管房间温度制冷控制器,HVAC,控制器
+Room temperature controller heating for fan,风机房间温度制热控制器,HVAC,控制器
+Room temperature controller heating for radiant ceiling,辐射吊顶房间温度制热控制器,HVAC,控制器
+Room temperature controller heating for heating/cooling coil,冷热盘管房间温度制热控制器,HVAC,控制器
+Room temperature controller heating for heating coil,加热盘管房间温度制热控制器,HVAC,控制器
+Room temperature controller heating for radiator,散热器房间温度制热控制器,HVAC,控制器
+Cooling coil,冷却盘管,HVAC,设备
+Heating coil,加热盘管,HVAC,设备
+Heating/cooling coil,冷热盘管,HVAC,设备
+Outside air damper,新风风阀,HVAC,设备
+OA damper,新风风阀,HVAC,设备缩写
+Radiant ceiling cooling,辐射吊顶制冷,HVAC,功能
+Fan operation,风机运行,HVAC,控制参数
+Series,串联,HVAC,运行方式
+Parallel,并联,HVAC,运行方式
+Coil valve start position by parallel operation,并联运行时盘管阀启动位置,HVAC,控制参数
+Coil valve end position by parallel operation,并联运行时盘管阀终止位置,HVAC,控制参数
+Fan end speed by parallel operation,并联运行时风机终止速度,HVAC,控制参数
+Offset for fan start,风机启动偏移,HVAC,控制参数
+Fan speed,风机速度,HVAC,控制参数
+Valve position,阀位,HVAC,控制参数
+Temperature sequence,温度序列,HVAC,控制顺序
+Heating sequence,制热顺序,HVAC,控制顺序
+Cooling sequence,制冷顺序,HVAC,控制顺序
+Outside air damper cooling sequence,新风风阀制冷顺序,HVAC,控制顺序
+Radiant ceiling cooling sequence,辐射吊顶制冷顺序,HVAC,控制顺序
+Heating/cooling coil cooling sequence,冷热盘管制冷顺序,HVAC,控制顺序
+Fan cooling sequence,风机制冷顺序,HVAC,控制顺序
+Radiator heating sequence,散热器制热顺序,HVAC,控制顺序
+Radiant ceiling heating sequence,辐射吊顶制热顺序,HVAC,控制顺序
+Heating/cooling coil heating sequence,冷热盘管制热顺序,HVAC,控制顺序
+Heating coil heating sequence,加热盘管制热顺序,HVAC,控制顺序
+Fan heating sequence,风机制热顺序,HVAC,控制顺序
+Controller mode,控制器模式,HVAC,控制参数
+Continuous,连续,HVAC,控制模式
+2-position,两位,HVAC,控制模式
+
+
+# ==================== 风机盘管温度设定值 ====================
+Present cooling setpoint,当前制冷设定值,HVAC,参数
+Present heating setpoint,当前制热设定值,HVAC,参数
+Present cooling setpoint for comfort,舒适当前制冷设定值,HVAC,参数
+Present cooling setpoint for pre-comfort,预舒适当前制冷设定值,HVAC,参数
+Present cooling setpoint for economy,经济当前制冷设定值,HVAC,参数
+Present cooling setpoint for protection,防护当前制冷设定值,HVAC,参数
+Present heating setpoint for comfort,舒适当前制热设定值,HVAC,参数
+Present heating setpoint for pre-comfort,预舒适当前制热设定值,HVAC,参数
+Present heating setpoint for economy,经济当前制热设定值,HVAC,参数
+Present heating setpoint for protection,防护当前制热设定值,HVAC,参数
+Cooling setpoint for comfort,舒适制冷设定值,HVAC,参数
+Cooling setpoint for pre-comfort,预舒适制冷设定值,HVAC,参数
+Cooling setpoint for economy,经济制冷设定值,HVAC,参数
+Cooling setpoint for protection,防护制冷设定值,HVAC,参数
+Heating setpoint for comfort,舒适制热设定值,HVAC,参数
+Heating setpoint for pre-comfort,预舒适制热设定值,HVAC,参数
+Heating setpoint for economy,经济制热设定值,HVAC,参数
+Heating setpoint for protection,防护制热设定值,HVAC,参数
+Delta cooling setpoint for pre-comfort,预舒适制冷设定值增量,HVAC,参数
+Delta heating setpoint for pre-comfort,预舒适制热设定值增量,HVAC,参数
+Delta,增量,HVAC,参数
+
+
+# ==================== 风机盘管配置参数 ====================
+Fan operation,风机运行,HVAC,控制参数
+Series,串联,HVAC,运行方式
+Parallel,并联,HVAC,运行方式
+Comfort configuration,舒适配置,HVAC,配置
+Pre-Comfort configuration,预舒适配置,HVAC,配置
+Economy configuration,经济配置,HVAC,配置
+Protection configuration,防护配置,HVAC,配置
+Cool down configuration,冷却配置,HVAC,配置
+Free cooling configuration,免费供冷配置,HVAC,配置
+Warm-up configuration,预热配置,HVAC,配置
+None,无,HVAC,配置选项
+Radiant devices,辐射设备,HVAC,配置选项
+Air treatment devices,空气处理设备,HVAC,配置选项
+Radiant & air treatment devices,辐射与空气处理设备,HVAC,配置选项
+Coil: Controller mode by comfort,舒适盘管控制器模式,HVAC,控制参数
+Coil: Controller mode by pre-comfort,预舒适盘管控制器模式,HVAC,控制参数
+Coil: Controller mode by economy,经济盘管控制器模式,HVAC,控制参数
+Coil: Controller mode by protection,防护盘管控制器模式,HVAC,控制参数
+Coil: Controller mode by cool down,冷却盘管控制器模式,HVAC,控制参数
+Coil: Controller mode by warm-up,预热盘管控制器模式,HVAC,控制参数
+Radiant devices: Controller mode by comfort,舒适辐射设备控制器模式,HVAC,控制参数
+Radiant devices: Controller mode by pre-comfort,预舒适辐射设备控制器模式,HVAC,控制参数
+Radiant devices: Controller mode by economy,经济辐射设备控制器模式,HVAC,控制参数
+Radiant devices: Controller mode by protection,防护辐射设备控制器模式,HVAC,控制参数
+Radiant devices: Controller mode by cool down,冷却辐射设备控制器模式,HVAC,控制参数
+Radiant devices: Controller mode by warm-up,预热辐射设备控制器模式,HVAC,控制参数
+
+
+# ==================== 风机盘管控制序列 ====================
+Radiator heating sequence,散热器制热顺序,HVAC,控制顺序
+Radiant ceiling heating sequence,辐射吊顶制热顺序,HVAC,控制顺序
+Heating/cooling coil heating sequence,冷热盘管制热顺序,HVAC,控制顺序
+Heating coil heating sequence,加热盘管制热顺序,HVAC,控制顺序
+Fan heating sequence,风机制热顺序,HVAC,控制顺序
+Outside air damper cooling sequence,新风风阀制冷顺序,HVAC,控制顺序
+Radiant ceiling cooling sequence,辐射吊顶制冷顺序,HVAC,控制顺序
+Heating/cooling coil cooling sequence,冷热盘管制冷顺序,HVAC,控制顺序
+Fan cooling sequence,风机制冷顺序,HVAC,控制顺序
+Sequence,顺序,HVAC,控制参数
+
+
+# ==================== 通风柜 Fume Hood ====================
+Fume hood,通风柜,FumeHood,实验室设备
+Fume hood sash,通风柜窗扇,FumeHood,操作部件
+Fume hood face area,通风柜迎风面积,FumeHood,设计参数
+Face area,迎风面积,FumeHood,设计参数
+Bypass opening,旁路开口,FumeHood,通风结构
+Sash Open Area Module,窗扇开口面积模块,FumeHood,控制模块
+Sash calibration,窗扇校准,FumeHood,调试操作
+Airflow restrictor,气流限流器,FumeHood,流量控制
+Perforated grille,多孔格栅,FumeHood,风口类型
+Louvers,百叶窗,FumeHood,风口类型
+Grille,格栅,FumeHood,风口
+Hood,排风罩,FumeHood,设备
+Capture velocity,捕集速度,FumeHood,设计参数
+Face velocity,面风速,FumeHood,设计参数
+Average face velocity,平均面风速,FumeHood,设计参数
+Sash height,窗扇高度,FumeHood,几何参数
+Sash opening,窗扇开口,FumeHood,操作参数
+Sash travel,窗扇行程,FumeHood,操作参数
+Closed sash,关闭窗扇,FumeHood,状态
+Open sash,开启窗扇,FumeHood,状态
+Maximum sash opening,最大窗扇开口,FumeHood,限值
+Sash track,窗扇轨道,FumeHood,几何结构
+Sash track height,窗扇轨道高度,FumeHood,配置参数
+Width of vertical sash,垂直窗扇宽度,FumeHood,配置参数
+Height of vertical sash,垂直窗扇高度,FumeHood,配置参数
+Single vertical sash,单垂直窗扇,FumeHood,窗扇类型
+Double vertical sash,双垂直窗扇,FumeHood,窗扇类型
+Walk-in fume hood,步入式通风柜,FumeHood,通风柜类型
+Fixed opening,固定开口,FumeHood,通风结构
+Unrestricted bypass opening,无限制旁路开口,FumeHood,配置参数
+Total area of fixed openings,固定开口总面积,FumeHood,配置参数
+Area on sensor failure,传感器故障面积,FumeHood,故障模式
+Face area valid signal,迎风面积有效信号,FumeHood,状态信号
+Height of bypass opening,旁路开口高度,FumeHood,配置参数
+SOAM (Sash Open Area Module),窗扇开口面积模块,FumeHood,硬件设备
+Sensor bus (SCOM),传感器总线,FumeHood,通信接口
+FhSash1Pos,通风柜窗扇1位置,FumeHood,输入信号
+FhSash2Pos,通风柜窗扇2位置,FumeHood,输入信号
+FhFaceArea,通风柜迎风面积,FumeHood,计算值
+FhExtFaceArea,通风柜外部迎风面积,FumeHood,输入信号
+ExtFaceArea,使用外部迎风面积,FumeHood,配置参数
+SashTckHgt,窗扇轨道高度,FumeHood,配置参数
+WdtVrtSash,垂直窗扇宽度,FumeHood,配置参数
+WdtVrtSash1,垂直窗扇1宽度,FumeHood,配置参数
+WdtVrtSash2,垂直窗扇2宽度,FumeHood,配置参数
+HgtVrtSash1,垂直窗扇1高度,FumeHood,配置参数
+HgtVrtSash2,垂直窗扇2高度,FumeHood,配置参数
+HgtBypOpn,旁路开口高度,FumeHood,配置参数
+BypOpnUrstd,无限制旁路开口,FumeHood,配置参数
+TotAreaFixOpn,固定开口总面积,FumeHood,配置参数
+AreaSenFail,传感器故障面积,FumeHood,故障值
+FaceAreaVld,迎风面积有效,FumeHood,状态信号
+Length unit,长度单位,FumeHood,单位
+Area unit,面积单位,FumeHood,单位
+LngtUnit,长度单位,FumeHood,参数
+AreaUnit,面积单位,FumeHood,参数
+TrndFhFaceArea,通风柜迎风面积趋势,FumeHood,趋势
+
+
+# ==================== 通风柜排风设定值与面风速控制 ====================
+Fume hood exhaust air setpoint,通风柜排风设定值,FumeHood,控制参数
+Fume hood face velocity setpoint,通风柜面风速设定值,FumeHood,设定值
+Fume hood face velocity,通风柜面风速,FumeHood,测量值
+Exhaust level,排风等级,FumeHood,控制方式
+Sash position switch,窗扇位置开关,FumeHood,输入开关
+Emergency purge,紧急吹扫,FumeHood,安全功能
+Occupied face velocity,有人面风速,FumeHood,设定值
+Unoccupied face velocity,无人面风速,FumeHood,设定值
+Low air volume flow,低风量模式,FumeHood,运行模式
+Mid exhaust airflow setpoint,中间排风量设定值,FumeHood,设定值
+Maximum exhaust airflow setpoint,最大排风量设定值,FumeHood,设定值
+Control setpoint,控制设定值,FumeHood,设定值
+Low flow setpoint,低流量设定值,FumeHood,设定值
+Face velocity monitor,面风速监测,FumeHood,功能
+Auto setpoint,自动设定值,FumeHood,设定值
+Manual setpoint,手动设定值,FumeHood,设定值
+Fume hood operating mode,通风柜运行模式,FumeHood,状态
+Exhaust setpoint selection,排风设定值选择,FumeHood,选择模式
+Relinquish manual mode,释放手动模式,FumeHood,控制
+Manual operation lock,手动操作锁定,FumeHood,锁止功能
+FhSpAirFlEh,通风柜排风量设定值,FumeHood,设定值
+FhSpAirFlRelEh,通风柜相对排风量设定值,FumeHood,设定值
+FhSpVFace,通风柜面风速设定值,FumeHood,设定值
+FhVFace,通风柜面风速,FumeHood,测量值
+FhVFaceEff,通风柜有效面风速,FumeHood,计算值
+FhSpSelEh,通风柜排风设定值选择,FumeHood,选择状态
+FhOpMod,通风柜运行模式,FumeHood,模式
+FhUcdSpVFace,通风柜无人面风速设定值,FumeHood,设定值
+FhOcdSpVFace,通风柜有人面风速设定值,FumeHood,设定值
+FhSpAirFlMidEh,通风柜中间排风量设定值,FumeHood,设定值
+FhSpAirFlManEh,通风柜手动排风量设定值,FumeHood,设定值
+FhSashSwi,通风柜窗扇开关,FumeHood,输入信号
+FhSashSwiCol,通风柜窗扇开关采集,FumeHood,采集接口
+FhEei,通风柜能效指示,FumeHood,状态
+FhAirFlReqEh,通风柜排风请求（来自房间）,FumeHood,需求信号
+FhAflMinEffEh,通风柜有效最小排风量,FumeHood,计算值
+FhAflMaxPvdEh,通风柜最大提供排风量,FumeHood,参数
+FhAflMinPvdEh,通风柜最小提供排风量,FumeHood,参数
+EeiRstInCol,能效指示复位输入采集,FumeHood,采集接口
+EeiRstIn,能效指示复位输入,FumeHood,输入信号
+SpSelEhIn,排风设定值选择输入,FumeHood,输入
+SpSelEhInCol,排风设定值选择输入采集,FumeHood,采集接口
+SpSelEhOdp,排风设定值选择输出至ODP,FumeHood,输出
+SpSelEhOdpCol,排风设定值选择输出至ODP采集,FumeHood,采集接口
+PrSpSelEh,当前排风设定值选择,FumeHood,当前值
+PrSpSelEhCol,当前排风设定值选择采集,FumeHood,采集接口
+SpEmgPrg,紧急吹扫设定值,FumeHood,设定值
+SpEhFire,火灾排风设定值,FumeHood,设定值
+TiIcrSpAirFlEh,增加排风设定值时间,FumeHood,时间参数
+TiDcrSpAirFlEh,减少排风设定值时间,FumeHood,时间参数
+DlyOnSpUcd,无人设定值开启延迟,FumeHood,时间参数
+SpVFaceMaxReq,房间请求最大面风速设定值,FumeHood,设定值
+SpAirFlMinReq,房间请求最小风量设定值,FumeHood,设定值
+SpAirFlMaxReq,房间请求最大风量设定值,FumeHood,设定值
+SpAirFlUcd,无人风量设定值,FumeHood,设定值
+SpOff,关闭设定值,FumeHood,设定值参数
+Sp1,设定值1,FumeHood,设定值参数
+Sp2,设定值2,FumeHood,设定值参数
+Sp3,设定值3,FumeHood,设定值参数
+SpOffUnit,关闭设定值单位,FumeHood,单位
+Sp1Unit,设定值1单位,FumeHood,单位
+Sp2Unit,设定值2单位,FumeHood,单位
+Sp3Unit,设定值3单位,FumeHood,单位
+EmgPrgCnf,紧急吹扫配置,FumeHood,配置参数
+SpSelEhLoAirFl,低风量排风设定值选择,FumeHood,配置参数
+RlqManSpSelEh,释放手动排风设定值选择,FumeHood,配置参数
+ManOpLockCnf,手动操作锁定配置,FumeHood,配置参数
+ManSpAfPwrFail,断电后保留手动设定值,FumeHood,配置参数
+AtnFltVFace,面风速衰减滤波,FumeHood,滤波参数
+Air velocity unit,风速单位,FumeHood,单位
+AirVUnit,风速单位,FumeHood,参数
+Decommission,停用/退役,FumeHood,模式类别
+Fire exhaust setpoint,火灾排风设定值,FumeHood,安全设定值
+
+
+# ==================== 通风柜窗扇位置器 ====================
+FhSashPsnr11,通风柜窗扇位置器,HVAC,控制模块
+Sash positioner,窗扇位置器,HVAC,设备
+Sash positioner close,窗扇位置器关闭,HVAC,功能
+Sash positioner command,窗扇位置器命令,HVAC,控制信号
+Pulse length close,脉冲关闭长度,HVAC,时间参数
+Delay repeat close,重复关闭延迟,HVAC,时间参数
+Enable close on energy efficiency reset,能效复位启用关闭,HVAC,配置参数
+FhSashPsnrCls,通风柜窗扇自动关闭,HVAC,控制
+FhSashPsnrCmd,通风柜窗扇位置器命令,HVAC,控制信号
+PulseLngtCls,脉冲关闭长度,HVAC,时间参数
+DlyRptCls,重复关闭延迟,HVAC,时间参数
+EnClsEeiRst,能效复位启用关闭,HVAC,配置参数
+FhSashClsIn,通风柜关闭输入,HVAC,输入信号
+EeiRstIn,能效复位输入,HVAC,输入信号
+Auto close,自动关闭,HVAC,功能
+Pulse close,脉冲关闭,HVAC,功能
+
+
+# ==================== 通风柜操作显示面板接口 ====================
+FhOdpItf,通风柜操作显示面板接口,HVAC,接口
+FhOdpItf11,通风柜操作显示面板接口11,HVAC,接口（QMX3.P87）
+FhOdpItf12,通风柜操作显示面板接口12,HVAC,接口（QMX3.P88）
+Operator display panel,操作显示面板,HVAC,设备
+ODP interface,操作显示面板接口,HVAC,接口
+QMX3.P87,QMX3.P87,HVAC,QMX3文本显示面板
+QMX3.P88,QMX3.P88,HVAC,QMX3 LED显示面板
+Face velocity result display,面风速结果显示,HVAC,显示功能
+Exhaust air volume flow result display,排风量结果显示,HVAC,显示功能
+DspyRslVFace,面风速结果显示,HVAC,显示字段
+DspyRslAirFlEh,排风量结果显示,HVAC,显示字段
+DspyWght,显示权重,HVAC,显示字段
+DspyValue,显示值,HVAC,显示字段
+Fld1Txt1Odp,字段1文本1操作面板,HVAC,显示配置
+Fld2Txt1Odp,字段2文本1操作面板,HVAC,显示配置
+Alarm indication,报警指示,HVAC,显示功能
+AlmIndOdp,报警指示操作面板,HVAC,显示配置
+Green LED,绿色LED,HVAC,指示灯
+GrnLedOdp,绿色LED操作面板,HVAC,显示输出
+Yellow LED,黄色LED,HVAC,指示灯
+YlwLedOdp,黄色LED操作面板,HVAC,显示输出
+Red LED,红色LED,HVAC,指示灯
+RedLedOdp,红色LED操作面板,HVAC,显示输出
+Buzzer mode,蜂鸣器模式,HVAC,音频指示
+BzzModOdp,蜂鸣器模式操作面板,HVAC,配置参数
+Buzzer state,蜂鸣器状态,HVAC,音频状态
+BzzStaOdp,蜂鸣器状态操作面板,HVAC,状态
+Buzzer silence,蜂鸣器静音,HVAC,功能
+BzzSlncIn,蜂鸣器静音输入,HVAC,输入信号
+Energy efficiency indicator,能效指示,HVAC,显示功能
+EeiOdp,能效指示操作面板,HVAC,显示输出
+LED off,LED关闭,HVAC,指示状态
+LED flash,LED闪烁,HVAC,指示状态
+LED blink,LED脉冲,HVAC,指示状态
+LED on,LED亮起,HVAC,指示状态
+5 flashes,5次闪烁,HVAC,指示状态
+5 flashes per minute,每分钟5次闪烁,HVAC,指示状态
+Buzzer off,蜂鸣器关闭,HVAC,音频状态
+Short buzz,短蜂鸣,HVAC,音频状态
+Long buzz,长蜂鸣,HVAC,音频状态
+5 buzz,5次蜂鸣,HVAC,音频状态
+5 buzz per minute,每分钟5次蜂鸣,HVAC,音频状态
+Buzzer on,蜂鸣器开启,HVAC,音频状态
+Energy efficiency leaf,能效等级,HVAC,显示图标
+Undefined,未定义,HVAC,状态
+Poor,差,HVAC,能效等级
+Satisfactory,一般,HVAC,能效等级
+Good,良好,HVAC,能效等级
+Excellent,优秀,HVAC,能效等级
+
+
+# ==================== 通风柜启动行为 ====================
+Fume hood startup behavior,通风柜启动行为,FumeHood,技术说明
+Startup behavior,启动行为,FumeHood,状态
+FAILED - DO NOT USE,故障-请勿使用,FumeHood,ODP显示
+Initialize setpoint,初始化设定值,FumeHood,启动参数
+Store dynamic data,存储动态数据,FumeHood,功能
+30-minute interval,30分钟间隔,FumeHood,参数
+
+
+
+
+
+
+
+# ==================== 实验室应用 ====================
+Lab,实验室,Lab,功能区域
+Laboratory,实验室,Lab,功能区域
+Room pressurization,房间压差,Lab,环境控制
+Room pressurization control,房间压差控制,Lab,控制功能
+Critical spaces,关键区域,Lab,高要求空间
+Critical space,关键空间,Lab,高要求空间
+Pressurization,压差控制,Lab,环境控制
+Airflow for critical spaces,关键空间通风,Lab,通风策略
+Airflow limits,风量限值,Lab,安全参数
+Clean room,洁净室,Lab,特殊空间
+Biosafety cabinet,生物安全柜,Lab,实验设备
+Isolation room,隔离室,Lab,特殊空间
+Negative pressure,负压,Lab,压差状态
+Positive pressure,正压,Lab,压差状态
+Air change rate,换气次数,Lab,通风参数
+
+
+# ==================== 文丘里阀校准 ====================
+Venturi valve calibration,文丘里阀校准,HVAC,调试功能
+Active calibration data table,活动校准数据表,HVAC,数据
+Inactive calibration data table,非活动校准数据表,HVAC,数据
+Active air flow,活动风量,HVAC,校准数据
+Active valve position,活动阀位,HVAC,校准数据
+Inactive air flow,非活动风量,HVAC,校准数据
+Inactive valve position,非活动阀位,HVAC,校准数据
+Search attempts,搜索尝试次数,HVAC,校准参数
+Holding time,保持时间,HVAC,校准参数
+Measuring period,测量周期,HVAC,校准参数
+Number of valid calibration points,有效校准点数,HVAC,校准状态
+Remaining calibration time,剩余校准时间,HVAC,校准状态
+Calibration error,校准错误,HVAC,错误状态
+Air volume flow units (SI),风量单位(SI),HVAC,单位配置
+
+
+# ==================== 除湿控制 ====================
+Dehumidification,除湿,HVAC,功能
+Humidity control,湿度控制,HVAC,功能
+Dehumidification control,除湿控制,HVAC,控制功能
+Relative humidity,相对湿度,HVAC,物理量
+Room humidity,房间湿度,HVAC,物理量
+Dehumidification cooling request,除湿制冷请求,HVAC,需求信号
+Maximum deviation heating for dehumidification,除湿最大偏差加热,HVAC,控制参数
+SpHuRelR,房间相对湿度设定值,HVAC,设定值
+SpHuRelRCmf,舒适房间相对湿度设定值,HVAC,设定值
+HDvnMaxDhu,除湿最大偏差加热,HVAC,控制参数
+HysHDvnMaxDhu,除湿最大偏差加热滞环,HVAC,控制参数
+DhuCtr,除湿控制器,HVAC,控制器
+DhuAvl,除湿可用,HVAC,状态
+DhuReq,除湿请求,HVAC,需求信号
+PrSpDhu,除湿预设设定值,HVAC,设定值
+DhuCtl,除湿控制,HVAC,应用函数
+
+
+# ==================== 能耗与监测 ====================
+Energy,能量,Energy,能源
+Energy consumption,能耗,Energy,能源统计
+Power consumption,功耗,Energy,能源统计
+Power demand,功率需求,Energy,能源参数
+Energy efficiency,能效,Energy,性能指标
+COP (Coefficient of Performance),性能系数,Energy,能效指标
+EER (Energy Efficiency Ratio),能效比,Energy,能效指标
+kWh,kWh,Energy,能耗单位
+Runtime,运行时间,Energy,时间统计
+Operating hours,运行小时数,Energy,时间统计
+Maintenance,维护,Maintenance,工作内容
+Predictive maintenance,预测性维护,Maintenance,维护策略
+Preventive maintenance,预防性维护,Maintenance,维护策略
+CMMS,CMMS计算机维护管理系统,Maintenance,系统缩写
+
+
+# 系统模式
+Plant mode,主机模式/System,系统运行模式
+PltOpMod (Plant Operation Mode),主机运行模式,System,变量名
+Economy,经济模式,Mode,运行模式
+Pre-Comfort,预舒适模式,Mode,运行模式
+Comfort,舒适模式,Mode,运行模式
+Warm-up,预热模式,Mode,运行模式
+Cool down,冷却模式,Mode,运行模式
+Night cooling,夜间冷却,Mode,运行模式
+Free cooling,免费供冷,Mode,运行模式
+Purge, purge冲洗/吹扫,Mode,运行模式
+Protection,保护模式,Mode,运行模式
+Ventilation mode,通风模式,Mode,运行模式
+Changeover condition,切换条件,System,转换条件
+Changeover function,切换功能,System,转换机制
+Neither,两者皆否,State,状态选项
+Neutral,中性/中间状态,State,状态选项
+Air volume flow off,风量关断,State,状态
+
+
+# ==================== 运行模式详细参数 ====================
+Plant operating mode,主机运行模式,HVAC,模式
+HVAC plant operating mode,HVAC主机运行模式,HVAC,模式
+Cool down request,冷却请求,HVAC,需求信号
+Warm-up request,预热请求,HVAC,需求信号
+Night cooling request,夜间冷却请求,HVAC,需求信号
+Free cooling request,免费供冷请求,HVAC,需求信号
+Cool down,冷却,HVAC,模式
+Warm-up,预热,HVAC,模式
+Night cooling,夜间冷却,HVAC,模式
+Free cooling,免费供冷,HVAC,模式
+Switch delay when present,存在时切换延迟,HVAC,时间参数
+Switch delay when absent,不在时切换延迟,HVAC,时间参数
+HvacPltMod,HVAC主机模式,HVAC,缩写
+PltOpMod,主机运行模式,HVAC,缩写
+Hvac Psc Mod,HVAC占用模式,HVAC,缩写
+Psc Det,占用检测,HVAC,缩写
+Cons. present & absent,持续存在与不在,HVAC,缩写
+Central operating mode,中央运行模式,HVAC,模式
+Operating strategy,运行策略,HVAC,策略
+Operating mode extended,扩展运行模式,HVAC,功能
+HvacPscMod,HVAC占用模式,HVAC,信号
+LgtPscMod,照明占用模式,HVAC,信号
+ShdPscMod,遮阳占用模式,HVAC,信号
+LgtOpStrgy,照明运行策略,HVAC,信号
+ShdOpStrgy,遮阳运行策略,HVAC,信号
+CenOpModMst,中央运行模式管理器,HVAC,接口
+Hierarchical grouping,层级分组,HVAC,组织方式
+Room HVAC coordination,房间HVAC协调,HVAC,功能
+Room lighting coordination,房间照明协调,HVAC,功能
+Room shading coordination,房间遮阳协调,HVAC,功能
+Lighting presence mode,照明占用模式,HVAC,模式
+Shading presence mode,遮阳占用模式,HVAC,模式
+Lighting operating strategy,照明运行策略,HVAC,策略
+Shading operating strategy,遮阳运行策略,HVAC,策略
+Consider present & absent,考虑存在与不在,HVAC,策略
+Consider absent,考虑不在,HVAC,策略
+
+
+# ==================== 设备模式与状态 ====================
+Device mode,设备模式,Status,设备状态
+Operating mode,运行模式,Status,设备状态
+Comfort,舒适,Status,模式
+Economy,经济,Status,模式
+Protection,防护,Status,模式
+Standby,待机,Status,模式
+Night,夜间,Status,模式
+Unoccupied,非占用,Status,占用状态
+Occupied,占用,Status,占用状态
+Override active,覆盖激活,Status,状态标志
+Alarm active,报警激活,Status,状态标志
+Fault,故障,Status,状态
+Failure,故障,Status,状态
+Normal,正常,Status,状态
+Active,激活,Status,状态
+Inactive,未激活,Status,状态
+Enabled,启用,Status,状态
+Disabled,禁用,Status,状态
+Locked,锁定,Status,状态
+Unlocked,解锁,Status,状态
+Start,启动,Status,动作
+Stop,停止,Status,动作
+Reset,复位,Status,动作
+Acknowledge,确认,Status,动作
+Normal operation,正常运行,Status,状态
+Limit exceeded,超出限制,Status,状态
+High limit,上限,Status,参数
+Low limit,下限,Status,参数
+Warning,警告,Status,状态级别
+Critical,严重,Status,状态级别
+Info,信息,Status,状态级别
+
+
+# ==================== 状态与信号增强 ====================
+Inactive,未激活,Status,状态
+Fully open,全开,Status,位置状态
+Fully closed,全关,Status,位置状态
+Partially open,半开,Status,位置状态
+Cooling demand,制冷需求,Status,需求信号
+Cooling status,制冷状态,Status,设备状态
+Cooling available,制冷可用,Status,能力状态
+Cooling active,制冷激活,Status,运行状态
+Heating demand,制热需求,Status,需求信号
+Heating status,制热状态,Status,设备状态
+Heating available,制热可用,Status,能力状态
+Heating active,制热激活,Status,运行状态
+Ventilation demand,通风需求,Status,需求信号
+Present,存在,Status,检测状态
+Absent,不在/缺席,Status,检测状态
+Occupied,占用,Status,占用状态
+Unoccupied,未占用,Status,占用状态
+Cons. present,持续存在,Status,缩写形式
+Cons. absent,持续不在,Status,缩写形式
+No Psc Fnct,无占用功能,Status,功能状态
+No occupancy function,无占用功能,Status,功能状态
+PscFnct (Presence Function),占用功能,Status,功能缩写
+Cons. (Constant),持续,Status,缩写
+Psc (Presence),占用,Status,缩写
+Occupancy,占用状态,Status,空间状态
+Motion,运动,Status,检测信号
+No motion,无运动,Status,检测信号
+Occupied by present,被当前占用,Status,状态描述
+Available,可用,Status,能力状态
+Unavailable,不可用,Status,能力状态
+Standby,待机,Status,工作状态
+Normal operation,正常运行,Status,工作状态
+Fault,故障,Status,错误状态
+Failure,失效,Status,错误状态
+Warning,警告,Status,告警级别
+Alarm,报警,Status,告警级别
+Critical,严重,Status,告警级别
+Overridden,被覆盖,Status,状态标志
+Handled,已处理,Status,状态标志
+Timed out,超时,Status,状态标志
+Stale,陈旧,Status,数据状态
+Valid,有效,Status,数据状态
+Invalid,无效,Status,数据状态
+Undefined,未定义,Status,状态
+
+
+# 控制策略
+Cascade control,串级控制,Control,控制方式
+Feedback loop,反馈回路,Control,控制环节
+Flow control loop,流量控制环,Control,具体环路
+Control logic,控制逻辑,Control,算法
+Switch,切换/开关,Control,动作
+Switch-on,开启,Control,动作阈值
+Switch-off,关闭,Control,动作阈值
+Delay,延迟/延时,Time,时间参数
+Hysteresis,滞环/回差,Control,控制特性
+Tolerance,容差/公差,Control,精度
+Tracking method,跟踪方法,Control,策略
+Setpoint tracking,设定点跟踪,Control,跟踪模式
+Airflow tracking,风量跟踪,Control,具体跟踪
+Deviation,偏差,Control,误差
+Deviation calculation,偏差计算,Control,计算
+Reset strategy,重置策略,Control,优化策略
+Demand level,需求等级,Signal,信号强度
+Active driver,有效驱动源,Control,驱动源
+Scale,比例/缩放,Control,调整
+Gain,增益,Control,PID参数
+Tn (Integral time),积分时间,Control,PID参数
+Rise time,上升时间,Control,PID参数
+Fall time,下降时间,Control,PID参数
+Neutral zone,死区/中性区,Control,PID参数
+Step response,阶跃响应,Control,调试响应
+Overshoot,超调,Control,调试响应
+Undershoot,欠调,Control,调试响应
+Searching,搜索振荡,Control,调试问题
+Face velocity control loop,面风速控制回路,Control,串级控制
+Cascade arrangement,串级布置,Control,控制架构
+Acceptance test,验收测试,Engineering,测试流程
+Request For Information,信息请求,Engineering,文档
+Tuning parameters,整定参数,Control,PID调试
+Filter time constant,滤波时间常数,Control,参数
+Flow sensor noise filter,流量传感器噪声滤波,Control,滤波参数
+Progress value,进度值,HVAC,阀位反馈
+Bundling,捆绑,Architecture,架构概念
+Precollect,预收集,Architecture,数据处理
+Group manager,组管理器,Architecture,组通信
+Nominal power demand,标称功率需求,HVAC,系统设计
+Bus interface module,总线接口模块,Hardware,硬件
+Task selector,任务选择器,Engineering,UI元素
+Plants navigation view,设备导航视图,Engineering,UI元素
+Library and Properties,库和属性,Engineering,UI元素
+Add data point,添加数据点,Engineering,操作
+Assign all,全部分配,Engineering,操作
+Plant focus,设备焦点,Engineering,UI概念
+I/O configuration,I/O配置,Engineering,任务
+BACnet references,BACnet引用,Engineering,配置
+M-bus,M-bus协议,Protocol,仪表总线
+Smart copy,智能复制,Engineering,操作
+Smart paste,智能粘贴,Engineering,操作
+User designation,用户命名,Engineering,工程设置
+Level structure,层级结构,Engineering,命名规则
+Separator,分隔符,Engineering,命名规则
+Naming defaults,命名默认值,Engineering,工程设置
+Pressure-dependent control,压力相关控制,HVAC,控制方式
+Duty cycling,循环通风,HVAC,通风模式
+Periodic air flush,周期性换气,HVAC,通风功能
+DutyCycCmf,舒适模式循环通风间隔,HVAC,配置参数
+DutyCycPcf,预舒适模式循环通风间隔,HVAC,配置参数
+DutyCycEco,经济模式循环通风间隔,HVAC,配置参数
+DutyCycPrt,防护模式循环通风间隔,HVAC,配置参数
+TiOnDutyCyc,循环通风开启时间,HVAC,时间参数
+CmfCnf,舒适配置,HVAC,通风模式配置
+DmpPosMinCmf,舒适最小风阀位置,HVAC,配置参数
+DmpPosMinPcf,预舒适最小风阀位置,HVAC,配置参数
+DmpPosMinEco,经济最小风阀位置,HVAC,配置参数
+DmpPosMinPrt,防护最小风阀位置,HVAC,配置参数
+DmpPosTrnAir,传递风量风阀位置,HVAC,压差控制
+DmpPosSuR,房间送风风阀位置,HVAC,控制信号
+PrSpDmpPosEx,排风风阀当前位置设定值,HVAC,控制信号
+Infiltration,渗透,HVAC,气流
+Exfiltration,渗出,HVAC,气流
+
+
+# ==================== 控制逻辑术语 ====================
+Control mode,控制模式,Control,运行模式
+Mode,模式,Control,通用
+Off,关闭,Control,状态
+Auto,自动,Control,状态
+Manual,手动,Control,状态
+Control,控制,Control,通用
+Controller,控制器,Control,设备
+Sequence,序列,Control,控制序列
+Sequence of operation,操作序列,Control,控制逻辑
+Setpoint,设定值,Control,参数
+Setpoint adjustment,设定值调整,Control,参数
+Setpoint schedule,设定值日程,Control,日程
+Default setpoint,默认设定值,Control,参数
+Room setpoint,房间设定值,Control,参数
+Heating setpoint,制热设定值,Control,参数
+Cooling setpoint,制冷设定值,Control,参数
+Comfort setpoint,舒适设定值,Control,参数
+Standby setpoint,待机设定值,Control,参数
+Economy setpoint,经济设定值,Control,参数
+Setpoint shift,设定值偏移,Control,参数
+Deadband,死区,Control,参数
+Proportional band,比例带,Control,参数
+Integral time,积分时间,Control,参数
+Derivative time,微分时间,Control,参数
+PI control,PI控制,Control,控制算法
+PID control,PID控制,Control,控制算法
+Feedback,反馈,Control,控制策略
+Feedforward,前馈,Control,控制策略
+Cascade control,串级控制,Control,控制策略
+Master,主站,Control,层级
+Slave,从站,Control,层级
+Override,覆盖,Control,控制动作
+Hand,手动,Control,操作模式
+Auto,自动,Control,操作模式
+DDC,DDC直接数字控制,Control,控制技术
+Proportional control,比例控制,Control,控制算法
+Two-position control,两位控制,Control,控制算法
+Modulating control,调节控制,Control,控制算法
+Step control,步进控制,Control,控制算法
+Three-position control,三位控制,Control,控制算法
+Floating control,浮点控制,Control,控制算法
+Adaptive control,自适应控制,Control,控制策略
+Optimized start,优化启动,Control,控制策略
+Optimum stop,优化停机,Control,控制策略
+Night setback,夜间设置,Control,节能策略
+Morning warm-up,早间预热,Control,节能策略
+Demand control,需求控制,Control,节能策略
+Demand limiting,需求限制,Control,节能策略
+Load shedding,负载削减,Control,节能策略
+Peak shaving,削峰,Control,节能策略
+Time schedule,时间日程,Control,日程控制
+Weekly schedule,周日程,Control,日程
+Exception schedule,例外日程,Control,日程
+Holiday schedule,假日日程,Control,日程
+Occupancy schedule,占用日程,Control,日程
+Operating schedule,运行日程,Control,日程
+Priority,优先级,Control,控制优先级
+Command,命令,Control,控制指令
+Status,状态,Control,设备状态
+Value,值,Control,数据值
+Input,输入,Control,信号输入
+Output,输出,Control,信号输出
+Commandable,可命令,Control,属性
+Commanded value,命令值,Control,控制值
+
+
+# ==================== 控制逻辑增强 ====================
+Cut-off logic,切断逻辑,Control,保护逻辑
+Equipment protection priority,设备保护优先级,Control,优先级设置
+Device mode logic switch,设备模式逻辑开关,Control,模式切换
+Loop control,回路控制,Control,控制方式
+Modulation,调制/调节,Control,控制方式
+Modulating,调节中,Control,状态
+Modulating control,调节控制,Control,控制方式
+Economizer,经济器/节能器,Control,节能设备
+Switch-on point,开启点,Control,阈值
+Switch-off point,关闭点,Control,阈值
+Switching delay,切换延迟,Control,时间参数
+Switching differential,切换差值,Control,控制参数
+Next room operating mode,下一房间运行模式,Control,状态预测
+Operating mode,运行模式,Control,设备状态
+Mode switch,模式切换,Control,操作
+Mode changeover,模式切换,Control,操作
+Time switch,时间开关,Control,定时控制
+Lead-lag,主备切换,Control,冗余控制
+Lead pump,主泵,Control,设备角色
+Lag pump,备泵,Control,设备角色
+Pumpdown,泵送,Control,运行状态
+Staging,分级控制,Control,控制策略
+Enable,启用,Control,操作
+Disable,禁用,Control,操作
+Block,封锁,Control,控制动作
+Force,强制,Control,控制动作
+Override,覆盖,Control,控制动作
+Auto-tuning,自动整定,Control,调试功能
+Self-tuning,自整定,Control,调试功能
+
+
+# 报警与安全
+Alarming,报警,Function,功能类别
+Alarm,报警,Safety,安全事件
+Alarming topology,报警拓扑,Safety,架构
+Alarm configuration,报警配置,Safety,配置
+Smoke control,排烟控制,Safety,消防
+Smoke extraction,排烟,Safety,消防
+Smoke ctrl.,排烟控制,Safety,缩写
+Emergency Off,紧急停止,Safety,紧急操作
+Equipment protection,设备保护,Safety,保护机制
+Priority,优先级,Control,控制参数
+Protection priority,保护优先级,Control,特定参数
+Saturation,饱和,Control,状态
+Starved,饥饿/不足,Status,状态描述
+Satisfied,满足/充足,Status,状态描述
+Condensation,凝结,Physical,物理现象
+Alert,告警,Status,状态
+Normal,正常,Status,状态
+
+
+# ==================== 报警与事件 ====================
+Alarming,报警功能,Alarm,功能
+Alarm,报警,Alarm,事件
+Alarming topology,报警拓扑,Alarm,系统架构
+Alarm notification,报警通知,Alarm,功能
+Alarm handling,报警处理,Alarm,功能
+Alarm generation,报警生成,Alarm,功能
+Alarm priority,报警优先级,Alarm,参数
+Alarm acknowledgment,报警确认,Alarm,动作
+Alarm routing,报警路由,Alarm,功能
+Alarm filtering,报警过滤,Alarm,功能
+Alarm message,报警消息,Alarm,数据
+Alarm limit,报警限值,Alarm,参数
+Alarm delay,报警延迟,Alarm,参数
+Alarm deadband,报警死区,Alarm,参数
+Alarm state,报警状态,Alarm,状态
+Alarm summary,报警摘要,Alarm,功能
+Active alarm,活动报警,Alarm,状态
+Alarm history,报警历史,Alarm,数据
+Alarm log,报警日志,Alarm,数据
+Event,事件,Alarm,通用
+Event notification,事件通知,Alarm,功能
+Event log,事件日志,Alarm,数据
+Trip,跳闸,Alarm,动作
+Intrinsic reporting,固有报告,Alarm,功能
+Feedback monitoring,反馈监控,Alarm,功能
+Limit monitoring,限值监控,Alarm,功能
+Runtime monitoring,运行时间监控,Alarm,功能
+Change of value,数值变更,Alarm,事件类型
+Deviation alarm,偏差报警,Alarm,类型
+High-high alarm,高高报警,Alarm,类型
+Low-low alarm,低低报警,Alarm,类型
+Out of range,超出范围,Alarm,状态
+Exceeded,超出,Alarm,状态
+Threshold,阈值,Alarm,参数
+Deadband,死区,Alarm,参数
+Event enable,事件启用,Alarm,配置
+Event transition,事件转换,Alarm,状态变化
+
+
+# ==================== 保护机制增强 ====================
+Room low temperature protection,房间低温保护,Safety,温度保护
+Room frost protection,房间防冻保护,Safety,温度保护
+Condensation overflow protection,防凝结溢流保护,Safety,设备保护
+Condensation protection,防凝结保护,Safety,设备保护
+Equipment temperature protection,设备温度保护,Safety,设备保护
+Frost protection,防冻保护,Safety,温度保护
+Anti-freeze,防冻,Safety,保护功能
+Anti-legionella,防军团菌,Safety,卫生保护
+Legionella protection,军团菌保护,Safety,卫生保护
+Low temperature alarm,低温报警,Safety,报警
+High temperature alarm,高温报警,Safety,报警
+Central emergency,集中紧急信号,Safety,安全信号
+Central emergency for HVAC,HVAC集中紧急信号,Safety,安全信号
+Emergency stop,紧急停止,Safety,安全操作
+Emergency mode,紧急模式,Safety,运行状态
+Safe state,安全状态,Safety,系统状态
+Safe position,安全位置,Safety,设备位置
+Fail-safe,故障安全,Safety,设计原则
+Fail position,故障位置,Safety,设备位置
+Safe position,安全位置,Safety,设备位置
+Override priority,覆盖优先级,Safety,优先级
+High priority,高优先级,Safety,优先级
+Low priority,低优先级,Safety,优先级
+Manual reset,手动复位,Safety,复位方式
+Auto reset,自动复位,Safety,复位方式
+
+
+# BACnet 协议术语
+BACnet,BACnet协议,Domain,通信协议
+BACnet object,BACnet对象,BACnet,数据结构
+AO (Analog Output),模拟量输出（AO）,BACnet,对象类型
+AI (Analog Input),模拟量输入（AI）,BACnet,对象类型
+AV (Analog Value),模拟量值（AV）,BACnet,对象类型
+BO (Boolean Output),布尔量输出（BO）,BACnet,对象类型
+BI (Boolean Input),布尔量输入（BI）,BACnet,对象类型
+BV (Boolean Value),布尔量值（BV）,BACnet,对象类型
+MO (Multi-state Output),多态输出（MO）,BACnet,对象类型
+MI (Multi-state Input),多态输入（MI）,BACnet,对象类型
+MV (Multi-state Value),多态值（MV）,BACnet,对象类型
+ACnfVal (Analog Configured Value),模拟配置值（ACnfVal）,BACnet,自定义类型
+ACalcVal (Analog Calculated Value),模拟计算值（ACalcVal）,BACnet,自定义类型
+BCalcVal (Boolean Calculated Value),布尔计算值（BCalcVal）,BACnet,自定义类型
+MPrcVal (Multi-state Processed Value),多态处理值（MPrcVal）,BACnet,自定义类型
+ColView (Collection View),集合视图（ColView）,BACnet,自定义类型
+GrpMbr (Group Member),组成员（GrpMbr）,BACnet,自定义类型
+FtrSel (Feature Selection),功能选择（FtrSel）,BACnet,自定义类型
+Trend,趋势,BACnet,功能
+Interlock,联锁/互锁,Control,控制逻辑
+Interlocks,联锁信号,Control,复数形式
+Signal,信号,Control,通用
+Type,类型,Metadata,元数据
+Direction,方向,Metadata,属性
+Description,描述,Metadata,元数据
+Comment,注释,Metadata,元数据
+In (Input),输入,Direction,方向
+Out (Output),输出,Direction,方向
+Dir. (Direction),方向,Direction,缩写
+Ref. (Reference),引用,Metadata,缩写
+Owned by,归属,Metadata,所有者关系
+
+
+# ==================== BACnet 协议术语 ====================
+BACnet,BACnet,BACnet,BACnet协议 - 保持原文
+BACnet object,BACnet对象,BACnet,协议对象
+BACnet device,BACnet设备,BACnet,网络设备
+BACnet/IP,BACnet/IP,BACnet,网络协议
+BACnet MSTP,BACnet MSTP,BACnet,串行协议
+Network,网络,BACnet,通信网络
+Device,设备,BACnet,网络设备
+Object,对象,BACnet,数据对象
+Object ID,对象ID,BACnet,对象标识符
+Object type,对象类型,BACnet,对象分类
+Object name,对象名称,BACnet,对象标识
+Property,属性,BACnet,对象属性
+Present Value,当前值,BACnet,对象属性
+Status Flags,状态标志,BACnet,对象属性
+Event State,事件状态,BACnet,对象属性
+Reliability,可靠性,BACnet,对象属性
+Out of service,脱离服务,BACnet,状态标志
+COV,变更-of-value,BACnet,事件机制
+COV Increment,COV增量,BACnet,阈值设置
+Multistate Value,多状态值,BACnet,对象类型
+Analog Value,模拟值,BACnet,对象类型
+Analog Input,模拟输入,BACnet,对象类型 - AI
+Analog Output,模拟输出,BACnet,对象类型 - AO
+Binary Value,二进制值,BACnet,对象类型
+Binary Input,二进制输入,BACnet,对象类型 - BI
+Binary Output,二进制输出,BACnet,对象类型 - BO
+Binary Input,二进制输入,BACnet,对象类型
+Binary Output,二进制输出,BACnet,对象类型
+Schedule,日程安排,BACnet,对象类型
+Calendar,日历,BACnet,对象类型
+Trend Log,趋势记录,BACnet,对象类型
+Notification Class,通知类,BACnet,对象类型
+Trend Log Multiple,多点趋势记录,BACnet,对象类型
+Load Control,负载控制,BACnet,对象类型
+Protocol,协议,BACnet,通信协议
+Protocol revision,协议版本,BACnet,版本信息
+Protocol object,协议对象,BACnet,协议对象
+Protocol services,协议服务,BACnet,通信服务
+ReadProperty,读取属性,BACnet,服务
+WriteProperty,写入属性,BACnet,服务
+ReadPropertyMultiple,多属性读取,BACnet,服务
+SubscribeCOV,订阅COV,BACnet,服务
+ConfirmedCOVNotification,确认COV通知,BACnet,服务
+UnconfirmedCOVNotification,不确认COV通知,BACnet,服务
+Device communication control,设备通信控制,BACnet,服务
+Who-Is,设备查询,BACnet,服务
+I-Am,设备响应,BACnet,服务
+Who-Has,对象查询,BACnet,服务
+I-Have,对象响应,BACnet,服务
+Network port,网络端口,BACnet,对象类型
+IP mode,IP模式,BACnet,配置
+Foreign device,外部设备,BACnet,配置
+ BBMD,BBMD,BACnet,广播管理设备
+FD,外部设备,BACnet,BACnet Foreign Device
+
+
+# ==================== BACnet/SC安全网络 ====================
+BACnet Secure Connect,BACnet安全连接,BACnet,协议
+BACnet/SC topology,BACnet/SC拓扑,BACnet,网络结构
+Building hub,建筑集线器,BACnet,网络设备
+Floor hub,楼层集线器,BACnet,网络设备
+Failover hub,故障切换集线器,BACnet,网络设备
+Node,节点,BACnet,网络设备
+Hub assignment,集线器分配,BACnet,配置
+SC network,安全连接网络,BACnet,网络
+BACnet/IP routing,BACnet/IP路由,BACnet,网络配置
+Assign hub,分配集线器,BACnet,操作
+Unassign,取消分配,BACnet,操作
+F-COM (Flow Communication),流量通信网络,BACnet,实验室专用网络
+BACnet F-COM,BACnet流量通信,BACnet,MS/TP子网
+
+
+# ==================== BACnet路由与网络 ====================
+BACnet routing,BACnet路由,BACnet,网络功能
+Ethernet port,以太网端口,BACnet,硬件接口
+Flexible use of Ethernet ports,以太网端口灵活使用,BACnet,配置
+Logical network topology,逻辑网络拓扑,BACnet,网络结构
+Physical network topology,物理网络拓扑,BACnet,网络结构
+BACnet data link,BACnet数据链路,BACnet,网络层
+
+
+# ==================== 附加BACnet对象 ====================
+Accumulator meter,累计表,BACnet,对象类型
+Certificate,证书,BACnet,对象类型
+Loop object,回路对象,BACnet,对象类型
+Simple process value,简单过程值,BACnet,对象类型
+Accumulator,累加器,BACnet,对象类型
+Analog simple process value,模拟简单过程值,BACnet,自定义类型
+Binary simple process value,布尔简单过程值,BACnet,自定义类型
+Multistate simple process value,多态简单过程值,BACnet,自定义类型
+Unsigned simple process value,无符号简单过程值,BACnet,自定义类型
+Integer simple process value,整数简单过程值,BACnet,自定义类型
+Proprietary BACnet object,专有BACnet对象,BACnet,自定义对象
+
+
+# ==================== Modbus 通信协议 ====================
+Modbus,Modbus协议,Protocol,通信协议
+Modbus RTU,Modbus RTU,Protocol,串行协议
+Modbus TCP,Modbus TCP,Protocol,网络协议
+Modbus Integration,Modbus集成,Protocol,系统集成
+Modbus register,Modbus寄存器,Protocol,数据单元
+Register,寄存器,Protocol,数据单元
+Holding register,保持寄存器,Protocol,数据类型
+Input register,输入寄存器,Protocol,数据类型
+Coil,线圈,Protocol,位数据
+Discrete input,离散输入,Protocol,位数据
+Bit order,位序,Protocol,数据格式
+Byte order,字节序,Protocol,数据格式
+Big-endian,大端序,Protocol,字节序类型
+Little-endian,小端序,Protocol,字节序类型
+Bit swapped,位交换,Protocol,数据处理
+Word swapped,字交换,Protocol,数据处理
+Byte swapped,字节交换,Protocol,数据处理
+Swapped,已交换,Protocol,数据状态
+Encoding format,编码格式,Protocol,数据格式
+Heartbeat,心跳,Protocol,通信监控
+Heartbeat timer,心跳定时器,Protocol,监控参数
+Polling timer,轮询定时器,Protocol,通信参数
+Polling interval,轮询间隔,Protocol,通信参数
+Polling times,轮询时间,Protocol,通信参数
+Poll,轮询,Protocol,通信操作
+Response timeout,响应超时,Protocol,通信参数
+Retry,重试,Protocol,通信参数
+Retry count,重试次数,Protocol,通信参数
+Exception,异常,Protocol,通信状态
+Exception code,异常码,Protocol,错误代码
+Function code,功能码,Protocol,Modbus命令
+Read holding registers,读保持寄存器,Protocol,Modbus功能
+Write single register,写单个寄存器,Protocol,Modbus功能
+Write multiple registers,写多个寄存器,Protocol,Modbus功能
+U8,无符号8位,Protocol,编码格式
+S8,有符号8位,Protocol,编码格式
+U16-B,无符号16位大端,Protocol,编码格式
+U16-L,无符号16位小端,Protocol,编码格式
+S16-B,有符号16位大端,Protocol,编码格式
+S16-L,有符号16位小端,Protocol,编码格式
+U32-B,无符号32位大端,Protocol,编码格式
+U32-B-S,无符号32位大端字节交换,Protocol,编码格式
+U32-L,无符号32位小端,Protocol,编码格式
+U32-L-S,无符号32位小端字节交换,Protocol,编码格式
+S32-B,有符号32位大端,Protocol,编码格式
+S32-B-S,有符号32位大端字节交换,Protocol,编码格式
+S32-L,有符号32位小端,Protocol,编码格式
+S32-L-S,有符号32位小端字节交换,Protocol,编码格式
+F16-B,16位浮点大端,Protocol,编码格式
+F16-L,16位浮点小端,Protocol,编码格式
+F32-B,32位浮点大端,Protocol,编码格式
+F32-B-S,32位浮点大端字节交换,Protocol,编码格式
+F32-L,32位浮点小端,Protocol,编码格式
+F32-L-S,32位浮点小端字节交换,Protocol,编码格式
+F64-B,64位浮点大端,Protocol,编码格式
+F64-B-S,64位浮点大端字节交换,Protocol,编码格式
+F64-L,64位浮点小端,Protocol,编码格式
+F64-L-S,64位浮点小端字节交换,Protocol,编码格式
+Bit-Offset,位偏移,Protocol,Modbus属性
+Number of bits,位数,Protocol,Modbus属性
+Mapping table,映射表,Protocol,Modbus属性
+Min repetition time,最小重复时间,Protocol,Modbus属性
+Process value,过程值,Protocol,线性转换
+Input value,输入值,Protocol,线性转换
+Linear function,线性函数,Protocol,数据转换
+Fieldbus-Management-Object,现场总线管理对象,Protocol,系统对象
+T1,T1轮询定时器,Protocol,高优先级
+T2,T2轮询定时器,Protocol,中优先级
+T3,T3轮询定时器,Protocol,低优先级
+H1,H1心跳定时器,Protocol,高优先级
+H2,H2心跳定时器,Protocol,低优先级
+Flow pressure measuring,流量压力测量,Protocol,AI扩展
+Altitude,海拔高度,Protocol,配置参数
+Units for altitude,海拔单位,Protocol,配置参数
+
+
+# ==================== DALI 通信协议 ====================
+DALI,DALI协议,Protocol,照明协议
+DALI-2,DALI-2,Protocol,照明协议版本
+Digital addressable lighting interface,数字可寻址照明接口,Protocol,全称
+DALI device,DALI设备,Protocol,照明设备
+DALI gateway,DALI网关,Protocol,网关设备
+DALI bus,DALI总线,Protocol,通信总线
+Light,灯光,Protocol,照明输出
+Luminaire,灯具,Protocol,照明设备
+Ballast,镇流器,Protocol,照明配件
+LED driver,LED驱动器,Protocol,照明配件
+Dimming level,调光级别,Protocol,控制参数
+Dimming,调光,Protocol,控制功能
+Scene,场景,Protocol,照明场景
+Group,分组,Protocol,设备分组
+Broadcast,广播,Protocol,通信方式
+
+
+# ==================== KNX 与遮阳控制 ====================
+KNX,KNX协议,Protocol,楼宇自动化总线
+KNX PL-Link,KNX PL-Link,Protocol,KNX变体
+SAB (Shutter Actuator Basic),遮阳帘执行器基本型,Shading,KNX遮阳帘执行器
+FSA (Fan Speed Actuator),风机速度执行器,HVAC,KNX风机执行器
+End position detection,末端位置检测,Shading,遮阳配置
+Move up time,上行时间,Shading,遮阳参数
+Move down time,下行时间,Shading,遮阳参数
+Move completion time,移动完成时间,Shading,遮阳参数
+Slat rotation maximum time,百叶最大旋转时间,Shading,遮阳参数
+Number of slat steps,百叶步数,Shading,遮阳参数
+Blinds position closed,百叶关闭位置,Shading,预定义位置
+Blinds position visual protection,百叶视觉保护位置,Shading,预定义位置
+Blinds position sun altitude low,百叶低太阳高度位置,Shading,预定义位置
+Blinds position sun altitude high,百叶高太阳高度位置,Shading,预定义位置
+Blinds position open,百叶开启位置,Shading,预定义位置
+Calibration command,校准命令,Shading,遮阳校准
+Calibration status,校准状态,Shading,遮阳状态
+Once at startup,启动时一次,Shading,末端检测模式
+Manual,手动,Shading,末端检测模式
+Auto,自动,Shading,末端检测模式
+Number of fan speeds,风机速度数量,HVAC,配置参数
+1-stage,1级速度,HVAC,风机级数
+2-stages,2级速度,HVAC,风机级数
+3-stages,3级速度,HVAC,风机级数
+Variable fan speed,可变风机速度,HVAC,控制方式
+Staged speed control,分级速度控制,HVAC,控制方式
+Rapid ventilation,快速通风,HVAC,通风功能
+Room operator unit,房间操作单元,UI,设备
+Room unit LED,房间单元LED,UI,指示功能
+Status LED,状态LED,UI,指示
+LED indication,LED指示,UI,功能
+Manual operation locked,手动操作锁定,UI,状态
+Always off,始终关闭,UI,LED模式
+Lighting on,照明开启,UI,LED模式
+Lighting off,照明关闭,UI,LED模式
+Boost function,加速功能,HVAC,功能
+Boost time,加速时间,HVAC,时间参数
+
+
+# ==================== 现场总线 Fieldbus ====================
+Fieldbus,现场总线,Fieldbus,通信总线
+Field bus,现场总线,Fieldbus,通信总线
+Field bus management,现场总线管理,Fieldbus,系统功能
+Field device,现场设备,Fieldbus,设备类型
+End device,终端设备,Fieldbus,设备类型
+End device,末端设备,Fieldbus,设备类型
+On-board output,板载输出,Fieldbus,硬件接口
+Bus coupler,总线耦合器,Fieldbus,网络设备
+Bus segment,总线段,Fieldbus,网络段
+Segment,段,Fieldbus,网络段
+Terminator,终端电阻,Fieldbus,网络配件
+Bias resistor,偏置电阻,Fieldbus,网络配件
+Topology,拓扑,Fieldbus,网络结构
+Line topology,线型拓扑,Fieldbus,网络结构
+Tree topology,树型拓扑,Fieldbus,网络结构
+Star topology,星型拓扑,Fieldbus,网络结构
+Termination,终端匹配,Fieldbus,网络配置
+Bus termination,总线终端匹配,Fieldbus,网络配置
+
+
+# ==================== 过程值与工程单位 ====================
+Process value,过程值,Process,工艺参数
+Process data,过程数据,Process,工艺数据
+Output value,输出值,Process,控制输出
+Input value,输入值,Process,控制输入
+Raw value,原始值,Process,未处理数据
+Scaled value,标定值,Process,已处理数据
+Engineering value,工程值,Process,工程量
+Physical value,物理值,Process,物理量
+Engineering unit,工程单位,Process,计量单位
+EU,工程单位,Process,缩写
+Engineering range,工程范围,Process,量程
+Range,量程,Process,参数范围
+Span,量程,Process,参数范围
+Offset,偏移,Process,修正值
+Gain,增益,Process,修正系数
+Linear,线性,Process,函数类型
+Linear function,线性函数,Process,数据转换
+Non-linear,非线性,Process,函数类型
+Scaling,标定,Process,数据转换
+Scaling factor,标定系数,Process,转换参数
+Normalize,标准化,Process,数据处理
+Denormalize,反标准化,Process,数据处理
+IEEE-754,IEEE-754,Process,浮点数标准
+Float,浮点数,Process,数据类型
+Integer,整数,Process,数据类型
+BCD,BCD码,Process,编码格式
+Unsigned,无符号,Process,数据类型
+Signed,有符号,Process,数据类型
+High byte,高字节,Process,数据格式
+Low byte,低字节,Process,数据格式
+
+
+# 工程与调试
+Engineering,工程,Phase,阶段
+Commissioning,调试,Phase,阶段
+Installation,安装,Phase,阶段
+Wiring,接线/布线,Installation,电气工作
+Mis-wiring,错误接线,Error,故障原因
+Improper installation,不当安装,Error,故障原因
+Specification,规格说明/规范,Document,技术文件
+Project specification,项目规范,Document,项目文件
+Box schedule,箱体明细表,Document,设备清单
+Sequence,时序/顺序,Logic,控制逻辑
+Balancing,平衡/调试,HVAC,调试步骤
+Air balancing,风量平衡,HVAC,调试任务
+Check,检查/验证,Action,操作动作
+Verify,验证,Action,确认动作
+Calibration,校准,Maintenance,维护操作
+Sensor calibration,传感器校准,Maintenance,具体操作
+Failure,故障/失效,Error,异常情况
+Response,响应,Behavior,行为
+Invalid condition,无效条件,Error,异常状态
+
+
+# ==================== 工程与调试 ====================
+Engineering,工程,Engineering,工作阶段
+Commissioning,调试,Engineering,工作阶段
+Start-up,启动,Engineering,工作阶段
+Parameter,参数,Engineering,配置项
+Configuration,配置,Engineering,设置
+Parameterization,参数化,Engineering,配置过程
+Programming,编程,Engineering,开发工作
+Application,应用,Engineering,程序
+Project,项目,Engineering,工作单元
+Site,现场,Engineering,项目位置
+Building,建筑物,Engineering,对象
+Floor,楼层,Engineering,建筑层级
+Zone,区域,Engineering,控制区域
+Room,房间,Engineering,空间
+Area,区域,Engineering,空间
+Sector,扇区,Engineering,功能区
+Functional,功能,Engineering,分类
+Installation,安装,Engineering,工作阶段
+Operation,运行,Engineering,工作阶段
+Maintenance,维护,Engineering,工作阶段
+Service,服务,Engineering,工作内容
+Upgrade,升级,Engineering,工作内容
+Migration,迁移,Engineering,工作内容
+Backup,备份,Engineering,数据操作
+Restore,恢复,Engineering,数据操作
+Download,下载,Engineering,数据传输
+Upload,上传,Engineering,数据传输
+Default,默认值,Engineering,参数
+Factory default,出厂默认,Engineering,参数
+User default,用户默认,Engineering,参数
+System parameter,系统参数,Engineering,参数
+Application parameter,应用参数,Engineering,参数
+Hardware configuration,硬件配置,Engineering,配置
+Software configuration,软件配置,Engineering,配置
+Point,点位,Engineering,数据点
+IO point,输入输出点,Engineering,点位
+AI (Analog Input),模拟输入点,Engineering,点位
+AO (Analog Output),模拟输出点,Engineering,点位
+BI (Binary Input),数字输入点,Engineering,点位
+BO (Binary Output),数字输出点,Engineering,点位
+Multistate input,多状态输入,Engineering,点位
+Multistate output,多状态输出,Engineering,点位
+Virtual point,虚拟点位,Engineering,点位
+System point,系统点位,Engineering,点位
+User point,用户点位,Engineering,点位
+Hardware point,硬件点位,Engineering,点位
+
+
+# ==================== 通信与接口 ====================
+Interface,接口,Communication,通信接口
+Communication,通信,Communication,功能
+Network,网络,Communication,通信网络
+Bus,总线,Communication,通信介质
+MS/TP,MS/TP,Communication,主从令牌环
+Ethernet,以太网,Communication,网络协议
+IP address,IP地址,Communication,配置
+MAC address,MAC地址,Communication,配置
+Subnet,子网,Communication,网络配置
+Gateway,网关,Communication,网络设备
+Router,路由器,Communication,网络设备
+Port,端口,Communication,通信端口
+Baud rate,波特率,Communication,通信参数
+Data bits,数据位,Communication,通信参数
+Parity,校验位,Communication,通信参数
+Stop bits,停止位,Communication,通信参数
+Handshake,握手,Communication,通信参数
+Polling,轮询,Communication,通信方式
+Polled,被轮询,Communication,状态
+Master polling,主站轮询,Communication,通信方式
+Token,令牌,Communication,MS/TP协议
+Token passing,令牌传递,Communication,MS/TP协议
+Master,主站,Communication,通信角色
+Slave,従站,Communication,通信角色
+TS,终端电阻,Communication,通信设备
+Terminator,终端电阻,Communication,通信设备
+Repeater,中继器,Communication,通信设备
+Hub,集线器,Communication,网络设备
+Switch,交换机,Communication,网络设备
+Bridge,网桥,Communication,网络设备
+IP configuration,IP配置,Communication,网络设置
+DHCP,DHCP动态主机配置协议,Communication,网络协议
+Static IP,静态IP,Communication,网络配置
+Auto IP,自动IP,Communication,网络配置
+Broadcast,广播,Communication,通信方式
+Multicast,组播,Communication,通信方式
+Unicast,单播,Communication,通信方式
+
+
+# ==================== 系统架构与层级 ====================
+Central AFs,中央应用函数,Architecture,系统架构
+Central AF,中央应用函数,Architecture,系统架构
+Central control,中央控制,Architecture,控制层级
+Central station,中央站,Architecture,控制中心
+Centralized,集中式,Architecture,架构类型
+Decentralized,分散式,Architecture,架构类型
+Room segment,房间段,Architecture,功能单元
+Room controller,房间控制器,Architecture,控制设备
+Room unit,房间单元,Architecture,功能单元
+Zone controller,区域控制器,Architecture,控制设备
+Zone,区域,Architecture,功能区域
+Area controller,区域控制器,Architecture,控制设备
+Group Master,组主站,Architecture,通信角色
+Group Member,组成员,Architecture,通信角色
+Master,主站,Architecture,通信角色
+Member,成员,Architecture,通信角色
+Peer-to-peer,对等通信,Architecture,通信模式
+Client-server,客户端-服务器,Architecture,通信模式
+Client,客户端,Architecture,通信角色
+Server,服务器,Architecture,通信角色
+Topology,拓扑,Architecture,网络结构
+Hierarchical,分层式,Architecture,架构类型
+
+
+# ==================== 楼宇自动化通用 ====================
+Building automation,楼宇自动化,BA,领域
+Building management,楼宇管理,BA,领域
+Building management system,楼宇管理系统,BA,系统
+BMS,BMS楼宇管理系统,BA,系统缩写
+BAS,BAS楼宇自动化系统,BA,系统缩写
+HVAC system,HVAC系统,BA,子系统
+Automation system,自动化系统,BA,系统
+Control system,控制系统,BA,系统
+Supervisory control,监控控制,BA,控制层级
+Supervision,监控,BA,功能
+SCADA,SCADA数据采集与监控系统,BA,系统
+Integration,集成,BA,系统功能
+Interoperability,互操作性,BA,系统特性
+Open protocol,开放协议,BA,协议特性
+Proprietary,专有的,BA,协议特性
+Cloud,云,BA,技术架构
+Edge,边缘,BA,技术架构
+IoT,物联网,BA,技术领域
+Analytics,分析,BA,数据应用
+Dashboard,仪表板,BA,用户界面
+Reporting,报表,BA,数据应用
+
+
+# ==================== 编程工作流与编辑器 ====================
+Top-down workflow,自顶向下工作流,Programming,工程方法
+Bottom-up workflow,自底向上工作流,Programming,工程方法
+Mixed workflow,混合工作流,Programming,工程方法
+Programming editor,编程编辑器,Programming,工具
+Chart partition,图表分区,Programming,编辑器功能
+Run sequence,运行序列,Programming,功能块顺序
+Auto-connect and auto-create BACnet objects,自动连接和创建BACnet对象,Programming,编辑器功能
+Enable engineering data on device,启用设备工程数据,Programming,工程配置
+Upload engineering data from device,从设备上传工程数据,Programming,操作
+Download engineering data to device,下载工程数据到设备,Programming,操作
+Align,对齐,Programming,编辑器命令
+Sheet numbering,图纸编号,Programming,编辑器功能
+Grid,网格,Programming,编辑器功能
+Preview pane,预览窗格,Programming,编辑器UI
+CFC (Continuous Function Chart),连续功能图,Programming,编程语言
+
+
+# ==================== 编程基础与设计模式 ====================
+Program design,程序设计,Programming,方法
+Depiction of function blocks,功能块表示法,Programming,编程概念
+Nested charts,嵌套图,Programming,编程概念
+Flat plant,平面设备,Programming,编程概念
+Nested plant,嵌套设备,Programming,编程概念
+Normal mode,正常模式,Programming,运行模式
+Exception mode,异常模式,Programming,运行模式
+Typical input blocks,典型输入块,Programming,设计模式
+Typical output blocks,典型输出块,Programming,设计模式
+Sequencing,排序,Programming,控制逻辑
+Creating staged controls,创建分级控制,Programming,设计模式
+Sequencing energy generators,能源发生器排序,Programming,设计模式
+Error codes,错误码,Programming,诊断
+System of units,单位制,Programming,配置
+
+
+# ==================== 功能块编程术语 ====================
+Function block,功能块,Programming,程序组件
+Read property,读取属性,Programming,BACnet操作
+Write analog,写入模拟量,Programming,功能块
+Write binary,写入二进制,Programming,功能块
+Write multistate,写入多状态,Programming,功能块
+Write date,写入日期,Programming,功能块
+Write date and time,写入日期和时间,Programming,功能块
+Write double integer value,写入双整数值,Programming,功能块
+Write analog group,写入模拟量组,Programming,功能块
+Write binary group,写入二进制组,Programming,功能块
+Write multistate group,写入多状态组,Programming,功能块
+Write multistate for present value,写入多状态当前值,Programming,功能块
+Write time,写入时间,Programming,功能块
+Write time of day,写入日内时间,Programming,功能块
+Write unsigned,写入无符号,Programming,功能块
+Write property for boolean value,写入布尔值属性,Programming,功能块
+Write property for double integer value,写入双整数值属性,Programming,功能块
+Enable write,启用写入,Programming,控制参数
+Set valid value indication,设置有效值指示,Programming,信号
+Repeat write,重复写入,Programming,控制参数
+Threshold value,阈值,Programming,参数
+Set unspecified value,设置未指定值,Programming,功能
+Present value state,当前值状态,Programming,状态
+BA-Object reference,BA对象引用,Programming,数据结构
+Device identifier,设备标识符,Programming,BACnet标识
+Object identifier,对象标识符,Programming,BACnet标识
+Item identifier,项目标识符,Programming,BACnet标识
+Property identifier,属性标识符,Programming,BACnet标识
+Array index,数组索引,Programming,参数
+Priority active,优先级激活,Programming,状态
+Disturbed,扰动,Programming,状态
+Error code indication,错误码指示,Programming,输出
+Faulty,故障,Programming,状态
+High limit reached,达到上限,Programming,状态
+Low limit reached,达到下限,Programming,状态
+Offnormal,异常状态,Programming,事件状态
+Maintenance state,维护状态,Programming,状态
+Operating hours,运行小时数,Programming,数据
+Suppress event detection,抑制事件检测,Programming,功能
+Suppress event notification,抑制事件通知,Programming,功能
+Enable data aggregation,启用数据聚合,Programming,功能
+Tracking value,跟踪值,Programming,BACnet属性
+Minimum write interval,最小写入间隔,Programming,时间参数
+Grouping tag,分组标签,Programming,配置参数
+Double integer,双整数,Programming,数据类型
+Date,日期,Programming,数据类型
+Date and time,日期和时间,Programming,数据类型
+Multistate,多状态,Programming,数据类型
+Reliability,可靠性,Programming,BACnet属性
+Time value,时间值,Programming,输出
+Time of day,日内时间,Programming,数据类型
+Ready,就绪,Programming,状态
+Hundredths of a second,百分之一秒,Programming,时间单位
+Milliseconds,毫秒,Programming,时间单位
+Minutes,分钟,Programming,时间单位
+Hours,小时,Programming,时间单位
+Days,天,Programming,时间单位
+Weekly,每周,Programming,时间单位
+
+
+# ==================== 功能块(扩展) ====================
+HOLD_R,保持实数值,Programming,功能块
+AVE_TIME,时间平均值,Programming,功能块
+POW_FNCT,幂函数,Programming,功能块
+Time-based average,时间平均值,Programming,计算功能
+Acquisition period,采集周期,Programming,时间参数
+Power function,幂函数,Programming,数学函数
+Base,底数,Programming,数学参数
+Exponent,指数,Programming,数学参数
+
+
+# ==================== 程序块：通用功能 ====================
+Program block,程序块,Programming,编程单元
+Characteristic function,特性函数,Programming,数学功能
+Kick function,强推功能,Control,维护功能
+Step up/down function,步进递增/递减功能,Control,控制功能
+Consumption per period,每周期消耗,Energy,计量
+Electrical trace heating,电伴热,HVAC,设备
+Power control and compensation,功率控制与补偿,Control,功能
+Startup function and alarm handling,启动功能与报警处理,Control,综合功能
+Suppress event notification,抑制事件通知,Control,报警功能
+Intelligent Valve,智能阀,HVAC,执行器
+Dynamic control valve,动态控制阀,HVAC,执行器
+Pump group,泵组,HVAC,设备
+Twin pump,双泵,HVAC,设备
+Variable speed control bypass,变速控制旁路,HVAC,控制功能
+
+
+# ==================== 制冷与热泵程序块 ====================
+Condenser,冷凝器,HVAC,制冷组件
+Evaporator,蒸发器,HVAC,制冷组件
+Refrigeration circuit,制冷回路,HVAC,系统
+Hydraulic circuit for cooling,冷却液压回路,HVAC,水系统
+Chiller with heat recovery,热回收冷水机组,HVAC,制冷设备
+Heat pump operation,热泵运行,HVAC,模式
+Inlet temperature control,入口温度控制,HVAC,控制功能
+Outlet temperature control,出口温度控制,HVAC,控制功能
+Refrigeration generation,制冷生成,HVAC,系统
+Chilled water storage tank,冷冻水储水箱,HVAC,设备
+
+
+# ==================== 中央与气象功能 ====================
+Central facade function,中央立面功能,Architecture,照明/遮阳
+Central operation for lighting,中央照明操作,Architecture,功能
+Central operation for shading,中央遮阳操作,Architecture,功能
+Central protection for shading,中央遮阳保护,Architecture,功能
+Central service for shading,中央遮阳服务,Architecture,功能
+Central seasonal compensation,中央季节补偿,Architecture,设定值校正
+Central weather station,中央气象站,Architecture,传感器站
+Solar radiation,太阳辐射,Weather,气象参数
+Wind speed,风速,Weather,气象参数
+Precipitation,降水量,Weather,气象参数
+
+
+# ==================== 气象与太阳位置 ====================
+Solar radiation conversion,太阳辐射转换,HVAC,计算功能
+Solar function facade,太阳立面函数,HVAC,遮阳控制
+Solar position calculation,太阳位置计算,HVAC,遮阳控制
+Enthalpy,焓,HVAC,热力学参数
+Absolute humidity,绝对湿度,HVAC,湿度参数
+Heating curve,加热曲线,HVAC,控制曲线
+Optimum start stop control,最优启停控制,Control,节能策略
+Thermal load analysis,热负荷分析,Control,计算功能
+Predictive heating controller,预测加热控制器,Control,控制功能
+Rate-of-change limitation,变化率限制,Control,保护功能
+Periodic pulse,周期脉冲,Control,信号
+Stop watch,秒表,Control,计时功能
+Restart counter,重启计数器,Control,计数功能
+
+
+# ==================== 供应链与设备图 ====================
+Supply chain hot water,热水供应链,HVAC,系统
+Heating request,制热请求,HVAC,需求信号
+Setpoint for heating request,制热请求设定值,HVAC,设定值
+Heating lockout,制热锁定,HVAC,保护功能
+Valve kick,阀门强推,HVAC,维护功能
+Valve override,阀门覆盖,HVAC,控制功能
+Outside air temperature,室外温度,HVAC,测量值
+SplyHwMst,热水供应链管理器,HVAC,组管理器
+Device chart,设备图表,Programming,PL-Link设备
+Plant chart,设备图表,Programming,编程概念
+Device chart programming patterns,设备图表编程模式,Programming,设计模式
+Pre-assigned,预分配,Programming,属性
+Internal programming logic,内部编程逻辑,Programming,设备固件
+UP258D12,UP258D12,Hardware,KNX PL-Link设备
+
+
+# ==================== 生活热水 ====================
+Domestic hot water,生活热水,HVAC,系统
+DHW,生活热水,HVAC,缩写
+Storage tank,储水箱,HVAC,设备
+Storage tank charge,储水箱充热,HVAC,功能
+Internal heat exchanger,内部换热器,HVAC,设备
+Hot water handling,热水处理,HVAC,功能
+
+
+# ==================== 附加通用应用函数 ====================
+Central optimum start stop control,中央最优启停控制,Control,功能
+Central room operation distribution,中央房间操作分配,Architecture,功能
+Extract air volume flow deviation evaluation,排风量偏差评估,HVAC,功能
+Supply chain extract air volume flow deviation,供应链排风量偏差,HVAC,功能
+Supply air volume flow deviation evaluation,送风量偏差评估,HVAC,功能
+Condensation prevention,防凝露,HVAC,保护功能
+Supply chain condensation prevention,供应链防凝露,HVAC,功能
+Changeover function for 2-pipe,两管制切换功能,HVAC,功能
+Supply chain changeover function for 2-pipe,供应链两管制切换,HVAC,功能
+2-pipe system,两管制系统,HVAC,水系统
+
+
+# ==================== 硬件设备与工程属性 ====================
+PXC3,PXC3模块化控制器,Hardware,自动化站
+DXP2,DXP2紧凑控制器,Hardware,控制器型号
+Host name,主机名,Hardware,网络配置
+DHCP,DHCP动态主机配置协议,Hardware,网络协议
+Fixed IP,固定IP,Hardware,网络配置
+IP address,IP地址,Hardware,网络配置
+Subnet mask,子网掩码,Hardware,网络配置
+Default gateway,默认网关,Hardware,网络配置
+DNS server,DNS服务器,Hardware,网络配置
+Domain,域,Hardware,网络配置
+APDU retries,APDU重试次数,Hardware,BACnet参数
+APDU timeout,APDU超时,Hardware,BACnet参数
+Max APDU length,最大APDU长度,Hardware,BACnet参数
+Serial number,序列号,Hardware,设备标识
+UDP port,UDP端口,Hardware,BACnet通信
+Time zone,时区,Hardware,配置
+Baudrate,波特率,Hardware,MS/TP通信
+MAC address,MAC地址,Hardware,网络标识
+Max. manager,最大管理器,Hardware,MS/TP参数
+Max info frames,最大信息帧,Hardware,MS/TP参数
+System of units,单位制,Hardware,工程单位
+Application type,应用类型,Hardware,工程配置
+Application architecture,应用架构,Hardware,工程信息
+Dependency tags,依赖标签,Hardware,工程配置
+Short designation,短名称,Hardware,设备标识
+Order number,订货号,Hardware,设备标识
+Rail,导轨,Hardware,硬件安装
+Device width,设备宽度,Hardware,硬件尺寸
+Power supply,电源,Hardware,供电
+Unit conversion,单位转换,Hardware,工程配置
+Object access level,对象访问级别,BACnet,安全配置
+Object usage,对象用途,BACnet,属性
+Building automation profile,楼宇自动化配置文件,BACnet,属性
+Profile name,配置文件名称,BACnet,属性
+State flag,状态标志,BACnet,属性
+Network number,网络编号,BACnet,MS/TP网络
+Link speed,链路速度,BACnet,网络参数
+Link speed auto-negotiation,链路速度自动协商,BACnet,网络参数
+Command,命令,BACnet,网络端口
+Activate,激活,BACnet,命令状态
+Idle,空闲,BACnet,命令状态
+Discard changes,丢弃变更,BACnet,命令状态
+Restart port,重启端口,BACnet,命令状态
+Changes in progress,进度中的变更,BACnet,状态
+Max. number of managers,最大管理器数量,BACnet,MS/TP参数
+Maximum info frames,最大信息帧数,BACnet,MS/TP参数
+Apply parameters,应用参数,Hardware,I/O配置
+TX rail,TX导轨,Hardware,硬件
+KNX rail,KNX导轨,Hardware,硬件
+DALI rail,DALI导轨,Hardware,硬件
+SSL settings,SSL设置,Hardware,安全配置
+Allow HTTP connection,允许HTTP连接,Hardware,安全配置
+Apogee integration,Apogee集成,Hardware,系统集成
+
+
+# ==================== 硬件设备与控制器 ====================
+DXR2,DXR2控制器,Hardware,房间自动化控制器
+DXR2.E09,DXR2.E09,Hardware,控制器型号
+DXR2.E09T,DXR2.E09T,Hardware,控制器型号（带PL-Link）
+DXR2.E10,DXR2.E10,Hardware,控制器型号
+DXR2.E12P,DXR2.E12P,Hardware,控制器型号
+DXR2.E12PX,DXR2.E12PX,Hardware,控制器型号
+DXR2.E18,DXR2.E18,Hardware,控制器型号
+DXR2.M09,DXR2.M09,Hardware,控制器型号
+DXR2.M09T,DXR2.M09T,Hardware,控制器型号（带PL-Link）
+DXR2.M10,DXR2.M10,Hardware,控制器型号
+DXR2.M11,DXR2.M11,Hardware,控制器型号
+DXR2.M12P,DXR2.M12P,Hardware,控制器型号
+DXR2.M12PX,DXR2.M12PX,Hardware,控制器型号
+DXR2.M18,DXR2.M18,Hardware,控制器型号
+Pin,引脚,Hardware,硬件接口
+I/O address,I/O地址,Hardware,硬件配置
+PL-Link,PL-Link总线,Hardware,现场设备总线
+APS,APS压差传感器,Hardware,传感器
+OAVS,OAVS压差传感器,Hardware,传感器
+Air velocity sensor,风速传感器,Hardware,传感器类型
+
+
+# ==================== 附加KNX设备 ====================
+UP258D3x,UP258D3x,Hardware,KNX PL-Link设备
+UP258D41,UP258D41,Hardware,KNX PL-Link设备
+UP258D51,UP258D51,Hardware,KNX PL-Link设备
+UP258D61,UP258D61,Hardware,KNX PL-Link设备
+AQR2570,AQR2570,Hardware,KNX传感器
+AQR2576,AQR2576,Hardware,KNX传感器
+RDG20..KN,RDG20..KN,Hardware,房间温控器
+RDG26..KN,RDG26..KN,Hardware,房间温控器
+QMX3.P30,QMX3.P30,Hardware,房间操作单元
+QMX3.P40,QMX3.P40,Hardware,房间操作单元
+QMX3.P70,QMX3.P70,Hardware,房间操作单元
+QMX3.P74,QMX3.P74,Hardware,房间操作单元
+
+
+# ==================== 设备操作面板配置 ====================
+Backlight timeout,背光超时,UI,操作面板
+Backlight brightness,背光亮度,UI,操作面板
+Enable key beep,启用按键提示音,UI,操作面板
+Area 1 text display time,区域1文本显示时间,UI,操作面板
+Setpoint display time,设定值显示时间,UI,操作面板
+Air volume flow units (SI),风量单位(SI),UI,显示配置
+Enable automatic sash positioning,启用自动窗扇定位,UI,通风柜配置
+Enable fume hood integrated light,启用通风柜集成灯,UI,通风柜配置
+Enable operation: Green leaf,启绿叶操作,UI,能效配置
+Fume hood mode icon type,通风柜模式图标类型,UI,显示配置
+Timeout to default page,默认页面超时,UI,操作面板
+Timeout user operation,用户操作超时,UI,操作面板
+Alarm display time,报警显示时间,UI,操作面板
+Info page,信息页面,UI,显示页面
+Enable pushbutton, mode manual,启用手动按钮,UI,操作配置
+Ramp charts,斜坡图,UI,图标类型
+Fan / ventilation stages,风机/通风级图标,UI,图标类型
+Key_4,按键4,UI,功能键
+Key_8,按键8,UI,功能键
+i-Button,信息按钮,UI,操作面板
+Active unit set,活动单位集,UI,单位配置
+Enable fume hood operation mode off,允许通风柜关闭模式,UI,操作权限
+Enable fume hood operation mode auto,允许通风柜自动模式,UI,操作权限
+Enable fume hood operation mode low,允许通风柜低风量模式,UI,操作权限
+Enable fume hood op. mode medium,允许通风柜中速模式,UI,操作权限
+Enable fume hood operation mode high,允许通风柜高速模式,UI,操作权限
+QMX2.P33,QMX2.P33,Hardware,壁挂式房间操作单元
+QMX2.P43,QMX2.P43,Hardware,壁挂式房间操作单元(带湿度传感器)
+Rubber keys,橡胶按键,UI,操作面板
+Doted backlit display,点阵背光显示,UI,操作面板
+Multi sensor,多传感器,Hardware,温湿度传感器
+GPDO,通用数字输出,Hardware,通道类型
+LDSB,灯光调光传感器基本型,Shading,通道类型
+SSSB,遮阳帘传感器基本型,Shading,通道类型
+Outside sensor zone,外部传感器区域,UI,操作面板配置
+Room climate operating mode,房间气候运行模式,UI,操作面板配置
+Presence button,存在按钮,UI,按键功能
+Temporary comfort,临时舒适,UI,模式
+Comfort prolongation,舒适延长,UI,模式
+Window contact indication,窗触指示,UI,状态显示
+Heating/cooling state,制热/制冷状态,UI,状态显示
+Setpoint shift,设定值偏移,UI,设定值调整
+Temperature unit,温度单位,UI,显示配置
+Increment,增量,UI,设定值步进
+Air quality display,空气质量显示,UI,显示配置
+Air quality text display,空气质量文本显示,UI,显示模式
+Room climate,房间气候,UI,操作面板页面
+Return to default display,返回默认显示,UI,操作面板配置
+Default display,默认显示,UI,操作面板配置
+Timeout for backlight,背光超时,UI,操作面板配置
+Advanced settings,高级设置,UI,操作面板配置
+Manual mode,手动模式,UI,优先级设置
+Operation limit,操作限制,UI,优先级设置
+Numeric,数值,UI,空气质量显示模式
+Symbols,符号,UI,空气质量显示模式
+Text,文本,UI,空气质量显示模式
+Poor,差,UI,空气质量
+Ok,一般,UI,空气质量
+Good,良好,UI,空气质量
+Scheduler override,日程覆盖,UI,操作面板
+Spare programmable buttons,备用可编程按钮,UI,操作面板
+
+
+# ==================== 传感器与检测器 ====================
+Presence detector,人体感应探测器,Sensor,传感器
+Presence detection,人体感应,Sensor,检测功能
+Window contact,窗触点,Sensor,门磁开关
+Window sensor,窗传感器,Sensor,传感器
+Sash position sensor,窗扇位置传感器,Sensor,专用传感器
+Velocity sensor,速度传感器,Sensor,流量检测
+Air quality sensor,空气质量传感器,Sensor,环境监测
+CO2 sensor,二氧化碳传感器,Sensor,环境监测
+Temperature sensor,温度传感器,Sensor,通用传感器
+Humidity sensor,湿度传感器,Sensor,环境监测
+Pressure sensor,压力传感器,Sensor,通用传感器
+Differential pressure sensor,差压传感器,Sensor,通用传感器
+Flow sensor,流量传感器,Sensor,通用传感器
+Smoke detector,烟雾探测器,Sensor,安全传感器
+Gas detector,气体探测器,Sensor,安全传感器
+Occupancy sensor,占用传感器,Sensor,空间检测
+Daylight sensor,日光传感器,Sensor,光照检测
+Membrane pressure sensor,薄膜压力传感器,Sensor,差压传感器
+Ni1000,Ni1000温度传感器,Sensor,温度测量
+NTC10K,NTC10K温度传感器,Sensor,温度测量
+NTC100K,NTC100K温度传感器,Sensor,温度测量
+PT1K,PT1K温度传感器,Sensor,温度测量
+PTC T1,PTC T1温度传感器,Sensor,温度测量
+0-10V,0-10V信号,Sensor,模拟信号类型
+4-20mA,4-20mA信号,Sensor,模拟信号类型
+Exhaust air temperature,排风温度,Sensor,温度测量
+Extract air temperature,回风温度,Sensor,温度测量
+Room temperature,房间温度,Sensor,温度测量
+Supply air temperature,送风温度,Sensor,温度测量
+Primary air temperature,一次风温度,Sensor,温度测量
+Relative humidity for duct,风管相对湿度,Sensor,湿度测量
+Relative humidity for room,房间相对湿度,Sensor,湿度测量
+Air after-treatment,空气后处理,HVAC,功能
+Stabilizing jet fan,稳定射流风机,HVAC,设备
+Stabilizing jet fan variable speed,稳定射流风机变速,HVAC,控制
+Stabilizing jet fan command,稳定射流风机命令,HVAC,信号
+Stabilizing jet fan state,稳定射流风机状态,HVAC,状态
+Stabilizing jet fan failure,稳定射流风机故障,HVAC,报警
+Differential pressure switch,差压开关,HVAC,传感器
+FhStbJetVarSpd,稳定射流风机变速输出,FumeHood,AO
+FhStbJetCmd,稳定射流风机命令,FumeHood,BO
+FhStbJetFanSta,稳定射流风机状态,FumeHood,BI
+FhStbJetFail,稳定射流风机故障,FumeHood,报警
+SpStbFanSpd,稳定射流风机速度设定值,FumeHood,设定值
+SwiOffSshpFan,窗扇关闭位置关稳定风机,FumeHood,阈值
+SwiOnSshpFan,窗扇开启位置开稳定风机,FumeHood,阈值
+SwiOffAreaFan,面积关闭值关稳定风机,FumeHood,阈值
+SwiOnAreaFan,面积开启值开稳定风机,FumeHood,阈值
+SwiOffAflEhFan,排风量关闭值关稳定风机,FumeHood,阈值
+DlyOffFanAirFl,稳定风机风量关闭延迟,FumeHood,时间参数
+TiOnStbFanAlm,稳定风机开启报警时间,FumeHood,时间参数
+HysAirFlEh,排风量滞环,FumeHood,控制参数
+CV (Constant Volume),定风量,HVAC,运行模式
+CV terminal,定风量末端,HVAC,设备类型
+Box schedule,箱体明细表,HVAC,工程文档
+Export application template,导出应用模板,Engineering,操作
+Import application template,导入应用模板,Engineering,操作
+.s1ct,.s1ct模板文件,Engineering,应用模板文件格式
+XML export,XML导出,Engineering,数据导出
+Device defaults,设备默认值,Engineering,工程设置
+Duplicate,复制,Engineering,I/O操作
+Signal type,信号类型,Engineering,I/O配置
+Humidifier,加湿器,HVAC,设备
+Three points control,三位控制,HVAC,控制方式
+Triac,三端双向晶闸管,HVAC,执行器
+Slow actuator,慢速执行器,HVAC,执行器类型
+
+
+# 通用技术术语
+Feature,特性/功能,General,通用
+Interface,接口,General,连接点
+Function,功能,General,通用
+Overview,概述,Section,章节标题
+Basic function,基本功能,Description,功能描述
+Main features,主要功能,Description,列表标题
+Note,注意/说明,Remark,提示信息
+The following,以下,Text,引导词
+As follows,如下,Text,引导词
+Respectively,分别,Text,副词
+Typically,通常,Text,频度副词
+In most cases,在大多数情况下,Text,场景限定
+Otherwise,否则,Logic,条件分支
+Depending on,取决于,Logic,依赖关系
+Based on,基于,Logic,依据
+For example,例如,Text,举例
+See also,另见,Reference,交叉引用
+See,参见,Reference,引用
+Refer to,参考,Reference,指引
+Additional information,附加信息,Information,信息类型
+Related,相关,Relation,关联性
+Associated,关联的,Relation,形容词
+Support,支持,Capability,能力
+Include,包含,Containment,包含关系
+Does not include,不包含,Containment,否定
+External,外部,Location,方位
+Internal,内部,Location,方位
+Separate,单独的/独立的,Structure,独立性
+Primary,主要的,Importance,优先级
+Secondary,次要的,Importance,优先级
+
+
+# 单位与符号（保持原样）
+m³/h,立方米/小时,Unit,体积流量单位 - 不翻译
+ft³/min,立方英尺/分钟,Unit,体积流量单位 - 不翻译
+l/s,升/秒,Unit,体积流量单位 - 不翻译
+s,秒,Unit,时间单位 - 不翻译
+%,百分比,Unit,百分数单位 - 不翻译
+°C,摄氏度,Unit,温度单位 - 不翻译
+vdc,伏直流,Unit,电压单位 - 不翻译
+cm,厘米,Unit,长度单位 - 不翻译
+
+
+# 版本与兼容性
+ABT 5.x and later,ABT 5.x及更高版本,Version,版本范围
+ABT 4.x and earlier,ABT 4.x及更早版本,Version,版本范围
+Version,版本,Metadata,通用
+Release,发布,Metadata,软件周期
+Compatible,兼容的,Compatibility,适配性
+
+
+# 特殊保留词汇（不翻译）
+Siemens,西门子,Brand,品牌名 - 保持原文
+Schweiz AG,瑞士股份公司,Legal,公司法律形式 - 保持原文
+Schema ST4,Schema ST4,Tool,工具名称 - 保持原文
+Bootstrap,Bootstrap,Framework,前端框架 - 保持原文
+jQuery,jQuery,Library,JS库 - 保持原文
+Home,首页,Navigation,导航文本
+Breadcrumb navigation,面包屑导航,UI,界面元素
+Previous,上一页,Navigation,导航
+Next,下一页,Navigation,导航
+Copyright,版权,Legal,法律声明
+
+
+# ==================== 安全证书管理 ====================
+Certificate management,证书管理,Security,功能
+Root certificate,根证书,Security,证书类型
+Certificate authority,证书颁发机构,Security,CA
+Operational certificate,运行证书,Security,证书类型
+Client certificate,客户端证书,Security,证书类型
+Certificate signing request,证书签名请求,Security,CSR
+Renew certificate,更新证书,Security,操作
+Export root certificate,导出根证书,Security,操作
+Import external certificate,导入外部证书,Security,操作
+Certificate type,证书类型,Security,属性
+Issuing authority,签发机构,Security,属性
+Valid until,有效期至,Security,属性
+Certificate expiration,证书过期,Security,事件
+Internal certificate,内部证书,Security,证书类型
+External certificate,外部证书,Security,证书类型
+BACnet/SC,BACnet安全连接,Security,BACnet扩展
+IEEE 802.1X,IEEE 802.1X网络认证,Security,网络协议
+Web certificate,Web证书,Security,HTTPS安全
+Public key,公钥,Security,加密
+Certificate report,证书报告,Security,文档
+Show details,显示详情,Security,操作
+Change certificate authority,更改证书颁发机构,Security,操作
+Network check,网络检查,Engineering,任务
+
+
+# ==================== 以人为本照明(HCL) ====================
+Human-Centric Lighting,以人为本照明,Lighting,概念
+HCL,以人为本照明,Lighting,缩写
+Color temperature,色温,Lighting,照明参数
+Brightness,亮度,Lighting,照明参数
+Warm white,暖白,Lighting,色温类型
+Cold white,冷白,Lighting,色温类型
+Transient,过渡,Lighting,色温类型
+Color control,颜色控制,Lighting,功能
+Light planner,照明规划师,Lighting,角色
+24-hour cycle,24小时周期,Lighting,时间
+DALI device type 8,DALI设备类型8,Lighting,DALI镇流器
+IEC 62386-209,IEC 62386-209标准,Lighting,照明标准
+Gear,驱动器,Lighting,DALI设备
+Lighting ballast,照明镇流器,Lighting,DALI设备
+
